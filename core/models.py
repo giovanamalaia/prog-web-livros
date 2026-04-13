@@ -13,6 +13,11 @@ class Perfil(models.Model):
     
 
 class Livro(models.Model):
+    STATUS_CHOICES = [
+        ('disponivel', 'Disponível'),
+        ('reservado', 'Reservado'),
+        ('trocado', 'Trocado'),
+    ]
     ESTADO_CHOICES = [
         ('N', 'Novo'),
         ('SN', 'Semi-novo'),
@@ -24,6 +29,10 @@ class Livro(models.Model):
     estado = models.CharField(max_length=2, choices=ESTADO_CHOICES)
 
     capa = models.ImageField(upload_to='capas/', blank=True, null=True)
+    disponivel = models.BooleanField(default=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='disponivel')
+    ISBN = models.CharField(max_length=13, blank=True, null=True)
+    dono = models.ForeignKey(User, on_delete=models.CASCADE, related_name='livros')
 
 
 
