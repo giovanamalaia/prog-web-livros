@@ -26,10 +26,11 @@ class Livro(models.Model):
     titulo = models.CharField(max_length=200)
     autor = models.CharField(max_length=200)
     estado = models.CharField(max_length=2, choices=ESTADO_CHOICES)
+
     capa = models.ImageField(upload_to='capas/', blank=True, null=True)
     disponivel = models.BooleanField(default=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='disponivel')
-    isbn = models.CharField(max_length=13, blank=True, null=True)
+    ISBN = models.CharField(max_length=13, blank=True, null=True)
     dono = models.ForeignKey(User, on_delete=models.CASCADE, related_name='livros')
 
     def __str__(self):
