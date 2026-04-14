@@ -1,1 +1,25 @@
+{% extends 'core/base.html' %}
+{% load static %}
 
+{% block title %}Cadastro de Usuário{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'core/css/cadastro.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="cadastro-container">
+    <h2>Crie sua conta</h2>
+    <p>Preencha os dados abaixo para começar a trocar livros.</p>
+
+    <form method="post">
+        {% csrf_token %}
+        
+        {{ form.as_p }}
+
+        <button type="submit">Finalizar Cadastro</button>
+    </form>
+
+    <p>Já tem uma conta? <a href="/login">Faça login aqui</a>.</p>
+</div>
+{% endblock %}

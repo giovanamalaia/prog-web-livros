@@ -30,7 +30,7 @@ class Livro(models.Model):
     capa = models.ImageField(upload_to='capas/', blank=True, null=True)
     disponivel = models.BooleanField(default=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='disponivel')
-    ISBN = models.CharField(max_length=13, blank=True, null=True)
+    isbn = models.CharField(max_length=13, blank=True, null=True)
     dono = models.ForeignKey(User, on_delete=models.CASCADE, related_name='livros')
 
     def __str__(self):
