@@ -1,6 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages 
 from .forms import RegistroForm
+from .forms import LoginForm
+from django.contrib.auth import login as auth_login, logout as auth_logout
+
 
 def home(request):
     return render(request, 'core/home.html')
@@ -11,12 +14,31 @@ def registro(request):
         form = RegistroForm(request.POST) 
         
         if form.is_valid():
-            # salva o usuário no bd
-            form.save() 
-            messages.success(request, 'Sua conta foi criada com sucesso! Faça o login para continuar.')
-            # redireciona para login
-            return redirect('login')
+            user = form.save()
+            auth_login(request, user)
+            messages.success(request, 'Conta criada e login realizado com sucesso!')
+            #redireciona para home
+            return redirect('home')
     else:
         form = RegistroForm()
     
     return render(request, 'core/cadastro.html', {'form': form})
+
+def login(request):
+    if request.method == 'POST':
+        form = LoginForm(request, data=request.POST)
+
+        if form.is_valid():
+            auth_login(request, form.get_user())
+            messages.success(request, 'Login realizado com sucesso!')
+            return redirect('home')
+    else:
+        form = LoginForm(request)
+
+    return render(request, 'core/login.html', {'form': form})
+
+
+def logout(request):
+    auth_logout(request)
+    messages.info(request, 'Você saiu da sua conta.')
+    return redirect('home')

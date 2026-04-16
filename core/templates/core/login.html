@@ -1,0 +1,23 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Login{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'core/css/cadastro.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="cadastro-container">
+    <h2>Entrar</h2>
+    <p>Digite seus dados para acessar.</p>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Entrar</button>
+    </form>
+
+    <p>Não tem conta? <a href="{% url 'registro' %}">Cadastre-se</a>.</p>
+</div>
+{% endblock %}

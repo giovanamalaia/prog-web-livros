@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.forms import ModelForm
 from .models import Livro, Interesse
-
+from django.contrib.auth.forms import AuthenticationForm
 
 class RegistroForm(UserCreationForm):
     username = forms.CharField(label='Nome de usuário')
@@ -39,3 +39,7 @@ class LivroForm(ModelForm):
         }
 
     #dono vem do usuário logado e status começa como disponível inicialmente, então não precisa do formulário para isso
+
+class LoginForm(AuthenticationForm):
+    username = forms.CharField(label='Nome de usuário')
+    password = forms.CharField(widget=forms.PasswordInput, label='Senha')

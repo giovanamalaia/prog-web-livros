@@ -13,9 +13,9 @@
             <a href="/">Home</a>
             {% if user.is_authenticated %}
                 <span>Olá, {{ user.username }}!</span>
-                <a href="/logout">Sair</a>
+                <a href="{% url 'logout' %}">Sair</a>
             {% else %}
-                <a href="/login">Entrar</a>
+                <a href="{% url 'login' %}">Entrar</a>
                 <a href="{% url 'registro' %}">Cadastrar-se</a>
             {% endif %}
         </nav>
