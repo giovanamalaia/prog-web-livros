@@ -10,9 +10,8 @@
 <body>
     <header>
         <nav>
-            <a href="/">Home</a>
-            {% if user.is_authenticated %}
-                <span>Olá, {{ user.username }}!</span>
+            {% if user.is_authenticated %} 
+                Olá, <a href="{% url 'perfil' %}">{{ user.username }}</a>!
                 <a href="{% url 'logout' %}">Sair</a>
             {% else %}
                 <a href="{% url 'login' %}">Entrar</a>
@@ -25,9 +24,5 @@
         {% block content %}
         {% endblock %}
     </main>
-
-    <footer>
-        <p>&copy; 2026 - Livrô </p>
-    </footer>
 </body>
 </html>

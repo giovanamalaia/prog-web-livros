@@ -1,0 +1,21 @@
+/* Estilos base (mínimos) */ /* comentário: cabeçalho do CSS */ 
+body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background: #f7f7f7; color: #222; } /* comentário: estilo geral */
+header { background: #ffffff; border-bottom: 1px solid #e6e6e6; } /* comentário: barra superior */
+nav { display: flex; gap: 12px; align-items: center; padding: 12px 16px; } /* comentário: menu */
+nav a { color: #222; text-decoration: none; } /* comentário: links */
+nav a:hover { text-decoration: underline; } /* comentário: hover */
+main { padding: 16px; } /* comentário: espaçamento padrão */
+
+/* Layout da tela logada (sidebar + conteúdo) */ /* comentário: seção da sidebar */
+.app-layout { display: flex; gap: 0; min-height: 60vh; background: #ffffff; border: 1px solid #e6e6e6; border-radius: 12px; overflow: hidden; } /* comentário: container do app */
+.sidebar { width: 72px; background: #ffffff; border-right: 1px solid #e6e6e6; } /* comentário: barra lateral */
+.sidebar-inner { display: flex; flex-direction: column; align-items: center; padding: 12px 0; } /* comentário: organiza itens da sidebar */
+.sidebar-brand { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border: 1px solid #e6e6e6; border-radius: 12px; } /* comentário: topo (ícone do site) */
+.sidebar-brand-placeholder { font-size: 11px; letter-spacing: 1px; } /* comentário: texto placeholder */
+.sidebar-sep { width: 36px; height: 1px; background: #e6e6e6; margin: 12px 0; } /* comentário: linha separadora */
+.sidebar-nav { display: flex; flex-direction: column; gap: 14px; align-items: center; } /* comentário: lista de ícones */
+.sidebar-link { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border-radius: 12px; color: #333; text-decoration: none; } /* comentário: botão do ícone */
+.sidebar-link:hover { background: #f2f2f2; } /* comentário: hover do ícone */
+.sidebar-link.is-active { background: #ffe3e3; color: #c0392b; } /* comentário: ícone ativo (página atual) */
+.sidebar-icon { width: 22px; height: 22px; } /* comentário: tamanho do SVG */
+.app-content { flex: 1; padding: 16px; background: #ffffff; } /* comentário: conteúdo do app */

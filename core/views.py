@@ -3,10 +3,10 @@ from django.contrib import messages
 from .forms import RegistroForm
 from .forms import LoginForm
 from django.contrib.auth import login as auth_login, logout as auth_logout
-
-
+ 
+ 
 def home(request):
-    return render(request, 'core/home.html')
+    return render(request, 'core/home.html', {'active_page': 'home'})  # define qual ícone fica "ativo" na sidebar
 
 def registro(request):
     if request.method == 'POST':
@@ -42,3 +42,15 @@ def logout(request):
     auth_logout(request)
     messages.info(request, 'Você saiu da sua conta.')
     return redirect('home')
+
+
+def favoritos(request):  
+    return render(request, 'core/favoritos.html', {'active_page': 'favoritos'})  
+
+
+def perfil(request): 
+    return render(request, 'core/perfil.html', {'active_page': 'perfil'}) 
+
+
+def configuracoes(request):  
+    return render(request, 'core/configuracoes.html', {'active_page': 'configuracoes'})  

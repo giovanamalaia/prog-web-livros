@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import home, registro, login, logout
-
+from .views import home, registro, login, logout, favoritos, perfil, configuracoes  # importa as páginas da sidebar
+ 
 urlpatterns = [
     # inicial (localhost:8000/)
     path('', home, name='home'),
@@ -13,4 +13,13 @@ urlpatterns = [
 
     # logout (localhost:8000/logout/)
     path('logout/', logout, name='logout'),
+
+    # favoritos (localhost:8000/favoritos/)
+    path('favoritos/', favoritos, name='favoritos'), 
+
+    # perfil (localhost:8000/perfil/)
+    path('perfil/', perfil, name='perfil'), 
+
+    # configurações (localhost:8000/configuracoes/)
+    path('configuracoes/', configuracoes, name='configuracoes'), 
 ]

@@ -1,0 +1,18 @@
+{% extends 'core/base.html' %} 
+
+{% block title %}Favoritos{% endblock %} 
+
+{% block content %} 
+{% if user.is_authenticated %} 
+<div class="app-layout"> 
+    {% include 'core/partials/sidebar.html' %} 
+    <section class="app-content"> 
+        <h2>Favoritos</h2> {# placeholder #}
+        <p>Meus interesses.</p> 
+    </section>
+</div> 
+{% else %} 
+<p>Você precisa estar logado para ver esta página.</p> 
+<a href="{% url 'login' %}">Ir para login</a> 
+{% endif %} 
+{% endblock %} 

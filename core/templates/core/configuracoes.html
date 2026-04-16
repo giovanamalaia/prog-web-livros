@@ -1,0 +1,18 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Configurações{% endblock %}
+
+{% block content %} 
+{% if user.is_authenticated %} 
+<div class="app-layout"> 
+    {% include 'core/partials/sidebar.html' %} {# barra lateral com ícones #}
+    <section class="app-content"> 
+        <h2>Configurações</h2> 
+        <p>Configs de usuário.</p> 
+    </section> 
+</div> 
+{% else %} 
+<p>Você precisa estar logado para ver esta página.</p> 
+<a href="{% url 'login' %}">Ir para login</a> 
+{% endif %} 
+{% endblock %} 
