@@ -1,11 +1,11 @@
-{% extends 'core/base.html' %}
+{% extends 'core/layouts/base.html' %}
 
 {% block title %}Perfil{% endblock %} 
 
 {% block content %} 
 {% if user.is_authenticated %} 
 <div class="app-layout"> 
-    {% include 'core/partials/sidebar.html' %} 
+    {% include 'core/layouts/sidebar.html' %} 
     <section class="app-content"> 
         <h2>Perfil</h2> {# placeholder #}
         <p><strong>Usuário:</strong> {{ user.username }}</p> 

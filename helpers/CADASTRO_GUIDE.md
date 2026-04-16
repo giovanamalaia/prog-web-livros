@@ -26,7 +26,7 @@ A função `registro(request)` trabalha com dois cenários:
 Definimos o caminho `path('cadastro/', ...)` e atribuímos um `name='registro'`. 
 - **Importante**: O `name` permite que usemos a tag `{% url 'registro' %}` nos templates, evitando caminhos "hardcoded" (fixos) que quebram facilmente.
 
-# 4. O Template (`core/templates/core/cadastro.html`)
-- **Herança**: Usa `{% extends 'core/base.html' %}` para manter o header/footer padrão.
+# 4. O Template (`core/templates/core/auth/cadastro.html`)
+- **Herança**: Usa `{% extends 'core/layouts/base.html' %}` para manter o header/footer padrão.
 - **Segurança**: O uso da tag `{% csrf_token %}` é obrigatório para evitar ataques em formulários POST.
 - **Filtro**: `{{ form.as_p }}` renderiza cada campo do formulário dentro de um parágrafo.

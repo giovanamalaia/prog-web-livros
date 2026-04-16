@@ -6,7 +6,7 @@ from django.contrib.auth import login as auth_login, logout as auth_logout
  
  
 def home(request):
-    return render(request, 'core/home.html', {'active_page': 'home'})  # define qual ícone fica "ativo" na sidebar
+    return render(request, 'core/pages/home.html', {'active_page': 'home'})  # define qual ícone fica "ativo" na sidebar
 
 def registro(request):
     if request.method == 'POST':
@@ -22,7 +22,7 @@ def registro(request):
     else:
         form = RegistroForm()
     
-    return render(request, 'core/cadastro.html', {'form': form})
+    return render(request, 'core/auth/cadastro.html', {'form': form})
 
 def login(request):
     if request.method == 'POST':
@@ -35,7 +35,7 @@ def login(request):
     else:
         form = LoginForm(request)
 
-    return render(request, 'core/login.html', {'form': form})
+    return render(request, 'core/auth/login.html', {'form': form})
 
 
 def logout(request):
@@ -45,12 +45,12 @@ def logout(request):
 
 
 def favoritos(request):  
-    return render(request, 'core/favoritos.html', {'active_page': 'favoritos'})  
+    return render(request, 'core/pages/favoritos.html', {'active_page': 'favoritos'})  
 
 
 def perfil(request): 
-    return render(request, 'core/perfil.html', {'active_page': 'perfil'}) 
+    return render(request, 'core/pages/perfil.html', {'active_page': 'perfil'}) 
 
 
 def configuracoes(request):  
-    return render(request, 'core/configuracoes.html', {'active_page': 'configuracoes'})  
+    return render(request, 'core/pages/configuracoes.html', {'active_page': 'configuracoes'})  

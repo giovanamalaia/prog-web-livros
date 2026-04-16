@@ -1,4 +1,3 @@
-{% load static %} {# habilita uso de {% static %} para arquivos em /core/static #}
 <aside class="sidebar"> {# container principal da barra lateral #}
     <div class="sidebar-inner"> {# conteúdo interno da barra #}
         <div class="sidebar-brand" aria-label="Ícone do site"> {# ícone do site #}
@@ -9,22 +8,19 @@
 
         <nav class="sidebar-nav" aria-label="Navegação lateral"> {# navegação com os ícones #}
             <a class="sidebar-link {% if active_page == 'home' %}is-active{% endif %}" href="{% url 'home' %}" aria-label="Home"> 
-                <img class="sidebar-icon" src="{% static 'core/img/home.png' %}" alt="" /> {# caminho correto: core/static/core/img/home.png #}
+                <i class="fa-solid fa-house sidebar-icon" aria-hidden="true"></i>
             </a> 
 
             <a class="sidebar-link {% if active_page == 'favoritos' %}is-active{% endif %}" href="{% url 'favoritos' %}" aria-label="Favoritos"> 
-                <img class="sidebar-icon" src="{% static 'core/img/heart.png' %}" alt="" /> {# caminho correto: core/static/core/img/heart.png #}
+                <i class="fa-solid fa-heart sidebar-icon" aria-hidden="true"></i>
             </a> 
 
             <a class="sidebar-link {% if active_page == 'perfil' %}is-active{% endif %}" href="{% url 'perfil' %}" aria-label="Perfil"> 
-                <svg class="sidebar-icon" viewBox="0 0 24 24" role="img" aria-hidden="true"> {# SVG: pessoa (temporário) #}
-                    <path d="M12 12a4.2 4.2 0 1 0-4.2-4.2A4.2 4.2 0 0 0 12 12z" fill="none" stroke="currentColor" stroke-width="1.8"></path> {# cabeça #}
-                    <path d="M4.5 21a7.5 7.5 0 0 1 15 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path> {# ombros #}
-                </svg> {# fim do SVG #}
+                <i class="fa-solid fa-user sidebar-icon" aria-hidden="true"></i>
             </a> 
 
             <a class="sidebar-link {% if active_page == 'configuracoes' %}is-active{% endif %}" href="{% url 'configuracoes' %}" aria-label="Configurações"> 
-                <img class="sidebar-icon" src="{% static 'core/img/settings.png' %}" alt="" /> {# caminho correto: core/static/core/img/settings.png #}
+                <i class="fa-solid fa-gear sidebar-icon" aria-hidden="true"></i>
             </a> 
         </nav> 
     </div> 

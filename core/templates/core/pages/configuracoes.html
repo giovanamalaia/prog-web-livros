@@ -1,15 +1,15 @@
-{% extends 'core/base.html' %} 
+{% extends 'core/layouts/base.html' %}
 
-{% block title %}Favoritos{% endblock %} 
+{% block title %}Configurações{% endblock %}
 
 {% block content %} 
 {% if user.is_authenticated %} 
 <div class="app-layout"> 
-    {% include 'core/partials/sidebar.html' %} 
+    {% include 'core/layouts/sidebar.html' %} 
     <section class="app-content"> 
-        <h2>Favoritos</h2> {# placeholder #}
-        <p>Meus interesses.</p> 
-    </section>
+        <h2>Configurações</h2> 
+        <p>Configs de usuário.</p> 
+    </section> 
 </div> 
 {% else %} 
 <p>Você precisa estar logado para ver esta página.</p> 

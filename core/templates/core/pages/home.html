@@ -1,4 +1,4 @@
-{% extends 'core/base.html' %}
+{% extends 'core/layouts/base.html' %}
 
 {% block title %}Início - Troca de Livros{% endblock %}
 
@@ -6,7 +6,7 @@
 <div class="home-container">    
     {% if user.is_authenticated %}
         <div class="app-layout"> {# layout da tela logada (sidebar + conteúdo) #}
-            {% include 'core/partials/sidebar.html' %} {# barra lateral com ícones #}
+            {% include 'core/layouts/sidebar.html' %} {# barra lateral com ícones #}
             <section class="app-content"> 
                 <p>
                     Que bom ter você de volta,
@@ -16,6 +16,7 @@
             </section> 
         </div> 
     {% else %}
+        <h1>Bem-vindo ao Livrô!</h1>
         <p>Para começar a trocar livros, crie sua conta gratuitamente.</p>
         <br>
         <a href="{% url 'registro' %}" style="padding: 10px 15px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px;">Cadastrar-se</a>
