@@ -1,14 +1,17 @@
 from django.urls import path
-from .views import home, registro, login, logout, favoritos, perfil, configuracoes  # importa as páginas da sidebar
- 
+from .views import home, registro, login, logout, favoritos, perfil, configuracoes
+
 urlpatterns = [
-    # inicial (localhost:8000/)
-    path('', home, name='home'),
+    # INICIAL (localhost:8000/)
+    path('', login, name='login_raiz'),
+    
+    # HOME / FEED (localhost:8000/home/)
+    path('home/', home, name='home'),
     
     # cadastro (localhost:8000/cadastro/)
     path('cadastro/', registro, name='registro'),
 
-    # login (localhost:8000/login/)
+    # login alternativo 
     path('login/', login, name='login'),
 
     # logout (localhost:8000/logout/)

@@ -1,25 +1,45 @@
-{% extends 'core/layouts/base.html' %}
+{% extends 'core/layouts/auth_base.html' %}
 {% load static %}
 
-{% block title %}Cadastro de Usuário{% endblock %}
+{% block title %}Registration{% endblock %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'core/css/auth/auth.css' %}">
+<link rel="stylesheet" href="{% static 'core/css/auth/auth.css' %}">
 {% endblock %}
 
 {% block content %}
-<div class="cadastro-container">
-    <h2>Crie sua conta</h2>
-    <p>Preencha os dados abaixo para começar a trocar livros.</p>
+<div class="auth-page-wrapper">
 
-    <form method="post">
-        {% csrf_token %}
-        
-        {{ form.as_p }}
+    <div class="auth-visual-side">
+        <div class="logo-container">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg>
+            <span>Livrô</span>
+        </div>
+    </div>
 
-        <button type="submit">Finalizar Cadastro</button>
-    </form>
+    <div class="auth-form-side">
+        <div class="top-actions">
+            <button class="lang-toggle">EN 🇬🇧</button>
+        </div>
 
-    <p>Já tem uma conta? <a href="/login">Faça login aqui</a>.</p>
+        <div class="form-container">
+            <div class="form-header">
+                <h2>Registration</h2>
+                <p>Come on and create an account</p>
+            </div>
+
+            <form method="post" class="custom-form">
+                {% csrf_token %} {{ form.as_p }}
+
+                <button type="submit" class="btn-submit">Sign up</button>
+            </form>
+
+            <p class="login-link">Already have an account? <a href="/login">Log in</a></p>
+        </div>
+    </div>
+
 </div>
 {% endblock %}

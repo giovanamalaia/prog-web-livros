@@ -41,7 +41,7 @@ def login(request):
 def logout(request):
     auth_logout(request)
     messages.info(request, 'Você saiu da sua conta.')
-    return redirect('home')
+    return redirect('login_raiz')
 
 
 def favoritos(request):  
