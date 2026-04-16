@@ -27,17 +27,17 @@
 
         <div class="form-container">
             <div class="form-header">
-                <h2>Registration</h2>
-                <p>Come on and create an account</p>
+                <h2>Cadastro</h2>
+                <p>Vamos lá, crie uma conta</p>
             </div>
 
             <form method="post" class="custom-form">
                 {% csrf_token %} {{ form.as_p }}
 
-                <button type="submit" class="btn-submit">Sign up</button>
+                <button type="submit" class="btn-submit">Cadastrar-se</button>
             </form>
 
-            <p class="login-link">Already have an account? <a href="/login">Log in</a></p>
+            <p class="login-link">Já tem uma conta? <a href="/login">Entrar</a></p>
         </div>
     </div>
 

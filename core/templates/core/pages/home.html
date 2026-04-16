@@ -1,26 +1,30 @@
 {% extends 'core/layouts/base.html' %}
+{% load static %}
 
-{% block title %}Início - Troca de Livros{% endblock %}
+{% block title %}Perfil{% endblock %} 
 
-{% block content %}
-<div class="home-container">    
-    {% if user.is_authenticated %}
-        <div class="app-layout"> {# layout da tela logada (sidebar + conteúdo) #}
-            {% include 'core/layouts/sidebar.html' %} {# barra lateral com ícones #}
-            <section class="app-content"> 
-                <p>
-                    Que bom ter você de volta,
-                    <strong><a href="{% url 'perfil' %}">{{ user.username }}</a></strong>!
-                </p>
-                <p>Essa é a sua Home logada (por enquanto só com a sidebar).</p> 
-            </section> 
-        </div> 
-    {% else %}
-        <h1>Bem-vindo ao Livrô!</h1>
-        <p>Para começar a trocar livros, crie sua conta gratuitamente.</p>
-        <br>
-        <a href="{% url 'registro' %}" style="padding: 10px 15px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px;">Cadastrar-se</a>
-        <a href="{% url 'login' %}" style="padding: 10px 15px; background-color: #6c757d; color: white; text-decoration: none; border-radius: 5px; margin-left: 10px;">Fazer Login</a> {# link para a rota login #}
-    {% endif %}
-</div>
+{% block content %} 
+{% if user.is_authenticated %} 
+
+    <header class="top-bar">
+        <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" placeholder="Search book, name, author...">
+        </div>
+        
+        <div class="top-bar-right">
+            <button class="lang-toggle">EN 🇬🇧</button>
+            <div class="user-info-mini">
+                <img src="https://i.pravatar.cc/150?img=47" alt="Avatar" class="avatar-mini">
+                <span>{{ user.get_full_name|default:user.username }}</span>
+            </div>
+            <i class="fa-regular fa-bell bell-icon"></i>
+        </div>
+    </header>
+
+    </div>
+
+{% else %} 
+    <script>window.location.href = "{% url 'login' %}";</script>
+{% endif %} 
 {% endblock %}

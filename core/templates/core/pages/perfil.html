@@ -1,18 +1,29 @@
 {% extends 'core/layouts/base.html' %}
+{% load static %}
 
 {% block title %}Perfil{% endblock %} 
 
 {% block content %} 
 {% if user.is_authenticated %} 
-<div class="app-layout"> 
-    {% include 'core/layouts/sidebar.html' %} 
-    <section class="app-content"> 
-        <h2>Perfil</h2> {# placeholder #}
-        <p><strong>Usuário:</strong> {{ user.username }}</p> 
-    </section> 
-</div> 
+
+    <header class="top-bar">
+        <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" placeholder="Search book, name, author...">
+        </div>
+        
+        <div class="top-bar-right">
+            <button class="lang-toggle">EN 🇬🇧</button>
+            <div class="user-info-mini">
+                <img src="https://i.pravatar.cc/150?img=47" alt="Avatar" class="avatar-mini">
+                <span>{{ user.get_full_name|default:user.username }}</span>
+            </div>
+            <i class="fa-regular fa-bell bell-icon"></i>
+        </div>
+    </header>
+    </div>
+
 {% else %} 
-<p>Você precisa estar logado para ver esta página.</p> 
-<a href="{% url 'login' %}">Ir para login</a> 
+    <script>window.location.href = "{% url 'login' %}";</script>
 {% endif %} 
 {% endblock %}

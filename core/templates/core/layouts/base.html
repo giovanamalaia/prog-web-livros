@@ -9,21 +9,17 @@
     {% block extra_css %}{% endblock %}
 </head>
 <body>
-    <header>
-        <nav>
-            {% if user.is_authenticated %} 
-                Olá, <a href="{% url 'perfil' %}">{{ user.username }}</a>!
-                <a href="{% url 'logout' %}">Sair</a>
-            {% else %}
-                <a href="{% url 'login' %}">Entrar</a>
-                <a href="{% url 'registro' %}">Cadastrar-se</a>
-            {% endif %}
-        </nav>
-    </header>
+    <div class="app-layout">
+        
+        {% if user.is_authenticated %}
+            {% include 'core/layouts/sidebar.html' %}
+        {% endif %}
 
-    <main>
-        {% block content %}
-        {% endblock %}
-    </main>
-</body>
+        <main class="app-content">
+            {% block content %}
+            {% endblock %}
+        </main>
+        
+    </div> 
+    </body>
 </html>
