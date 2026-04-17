@@ -62,8 +62,13 @@ def configuracoes(request):
 
 
 def home(request):
-    # pega os 10 últimos livros adicionados 
-    latest_books = Livro.objects.filter(disponivel=True).order_by('-data_adicao')[:10]
+    livros_disponiveis = Livro.objects.filter(disponivel=True)
+    
+    # livros do usuario logado nao aparecem na lista
+    if request.user.is_authenticated:
+        livros_disponiveis = livros_disponiveis.exclude(dono=request.user)
+    
+    latest_books = livros_disponiveis.order_by('-data_adicao')[:15]
     
     context = {
         'latest_books': latest_books,
