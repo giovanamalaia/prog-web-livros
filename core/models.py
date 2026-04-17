@@ -22,10 +22,36 @@ class Livro(models.Model):
         ('SN', 'Semi-novo'),
         ('U', 'Usado'),
     ]
+    GENERO_CHOICES = [
+        ('ficcao_geral', 'Ficção Geral'),
+        ('nao_ficcao_geral', 'Não Ficção Geral'),
+        ('fantasia', 'Fantasia'),
+        ('ficcao_cientifica', 'Ficção Científica'),
+        ('romance', 'Romance'),
+        ('misterio_suspense', 'Mistério & Suspense'),
+        ('terror', 'Terror'),
+        ('aventura', 'Aventura'),
+        ('jovem_adulto', 'Jovem Adulto'),
+        ('infantil', 'Infantil & Infanto-juvenil'),
+        ('hq_manga', 'HQs, Mangás & Graphic Novels'),
+        ('biografia', 'Biografia'),
+        ('autoajuda', 'Autoajuda'),
+        ('academico', 'Acadêmicos'),
+        ('historia_politica', 'História & Política'),
+        ('religiao', 'Religião & Espiritualidade'),
+        ('classica', 'Literatura Clássica'),
+        ('contemporanea', 'Literatura Contemporânea'),
+        ('drama', 'Drama'),
+        ('poesia', 'Poesia'),
+        ('teatro', 'Teatro (Peças)'),
+        ('outros', 'Outros'),
+    ]
 
     titulo = models.CharField(max_length=200)
     autor = models.CharField(max_length=200)
     estado = models.CharField(max_length=2, choices=ESTADO_CHOICES)
+
+    genero = models.CharField(max_length=30, choices=GENERO_CHOICES, default='outros')
 
     capa = models.ImageField(upload_to='capas/', blank=True, null=True)
     disponivel = models.BooleanField(default=True)

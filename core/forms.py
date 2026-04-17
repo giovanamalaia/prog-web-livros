@@ -29,10 +29,11 @@ class RegistroForm(UserCreationForm):
 class LivroForm(ModelForm):
     class Meta:
         model = Livro
-        fields = ['titulo', 'autor', 'estado', 'capa'] 
+        fields = ['titulo', 'autor', 'genero', 'estado', 'capa'] 
         labels = {
             'titulo': 'Título',
             'autor': 'Autor',
+            'genero': 'Gênero', 
             'estado': 'Estado',
             'capa': 'Capa',
         }
