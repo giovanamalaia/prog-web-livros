@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages 
 from .forms import RegistroForm
 from .forms import LoginForm
@@ -9,8 +9,7 @@ from .forms import LivroForm
 import json
 import urllib.request
 from django.core.files.base import ContentFile
- 
- 
+
 def home(request):
     return render(request, 'core/pages/home.html', {'active_page': 'home'})  # define qual ícone fica "ativo" na sidebar
 
@@ -102,5 +101,40 @@ def adicionar_livro(request):
     context = {
         'form': form,
         'active_page': 'adicionar_livro'
+    }
+    return render(request, 'core/pages/adicionar_livro.html', context)
+    
+
+@login_required(login_url='login_raiz')
+def detalhe_livro(request, livro_id):
+    # busca livro pelo id 
+    livro = get_object_or_404(Livro, id=livro_id)
+    
+    context = {
+        'livro': livro,
+        'active_page': 'home'
+    }
+    return render(request, 'core/pages/detalhe_livro.html', context)
+
+@login_required(login_url='login_raiz')
+def editar_livro(request, livro_id):
+    # busca o livro, mas exige que o dono seja o usuário logado
+    livro = get_object_or_404(Livro, id=livro_id, dono=request.user)
+
+    if request.method == 'POST':
+        # atualizar o existente
+        form = LivroForm(request.POST, request.FILES, instance=livro) 
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Livro atualizado com sucesso!')
+            return redirect('detalhe_livro', livro_id=livro.id) 
+    else:
+        # carregar o formulário com os dados do livro existente
+        form = LivroForm(instance=livro)
+
+    context = {
+        'form': form,
+        'active_page': 'perfil',
+        'editando': True 
     }
     return render(request, 'core/pages/adicionar_livro.html', context)

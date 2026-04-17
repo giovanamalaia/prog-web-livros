@@ -1,57 +1,43 @@
 {% extends 'core/layouts/base.html' %}
 {% load static %}
 
-{% block title %}Perfil{% endblock %} 
+{% block title %}Perfil{% endblock %}
 
-{% block content %} 
-{% if user.is_authenticated %} 
+{% block content %}
+{% if user.is_authenticated %}
 
-    <header class="top-bar">
-        <div class="search-box">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" placeholder="Search book, name, author...">
-        </div>
-        
-        <div class="top-bar-right">
-            <button class="lang-toggle">EN 🇬🇧</button>
-            <div class="user-info-mini">
-                <img src="https://i.pravatar.cc/150?img=47" alt="Avatar" class="avatar-mini">
-                <span>{{ user.get_full_name|default:user.username }}</span>
-            </div>
-            <i class="fa-regular fa-bell bell-icon"></i>
-        </div>
-    </header>
+{% include 'core/components/top_bar.html' %}
 
-    <div class="profile-page-wrapper">
-        <div class="profile-form-side">
-            <form class="app-custom-form" method="post">
-                {% csrf_token %}
-                <p>
-                    <label>Email</label>
-                    <input type="email" value="{{ user.email }}" readonly>
-                </p>
-                <p>
-                    <label>Password</label>
-                    <input type="password" value="********" readonly>
-                </p>
-                <p>
-                    <label>Fullname</label>
-                    <input type="text" value="{{ user.get_full_name|default:user.username }}">
-                </p>
-                <button type="submit" class="btn-blue">Confirm</button>
-            </form>
-        </div>
-
-        <div class="profile-photo-side">
-            <div class="large-avatar-container">
-                <img src="https://i.pravatar.cc/300?img=47" alt="Foto de Perfil">
-            </div>
-            <button class="btn-blue-action">Change Photo</button>
-            <a href="{% url 'logout' %}" class="btn-blue-action btn-logout">log out</a>
-        </div>
+<div class="profile-page-wrapper">
+    <div class="profile-form-side">
+        <form class="app-custom-form" method="post">
+            {% csrf_token %}
+            <p>
+                <label>Email</label>
+                <input type="email" value="{{ user.email }}" readonly>
+            </p>
+            <p>
+                <label>Password</label>
+                <input type="password" value="********" readonly>
+            </p>
+            <p>
+                <label>Fullname</label>
+                <input type="text" value="{{ user.get_full_name|default:user.username }}">
+            </p>
+            <button type="submit" class="btn-blue">Confirm</button>
+        </form>
     </div>
 
-{% else %} 
-    <script>window.location.href = "{% url 'login' %}";</script>
-{% endif %} 
+    <div class="profile-photo-side">
+        <div class="large-avatar-container">
+            <img src="https://i.pravatar.cc/300?img=47" alt="Foto de Perfil">
+        </div>
+        <button class="btn-blue-action">Change Photo</button>
+        <a href="{% url 'logout' %}" class="btn-blue-action btn-logout">log out</a>
+    </div>
+</div>
+
+{% else %}
+<script>window.location.href = "{% url 'login' %}";</script>
+{% endif %}
 {% endblock %}

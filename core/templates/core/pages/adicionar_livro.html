@@ -6,30 +6,16 @@
 {% block content %}
 {% if user.is_authenticated %}
 
-<header class="top-bar">
-    <div class="search-box">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" placeholder="Search book, name, author...">
-    </div>
-
-    <div class="top-bar-right">
-        <button class="lang-toggle">EN 🇬🇧</button>
-        <div class="user-info-mini">
-            <img src="https://i.pravatar.cc/150?img=47" alt="Avatar" class="avatar-mini">
-            <span>
-                {% if user.first_name %}
-                {{ user.first_name|title }} {{ user.last_name|title }}
-                {% else %}
-                {{ user.username|title }}
-                {% endif %}
-            </span>
-        </div>
-        <i class="fa-regular fa-bell bell-icon"></i>
-    </div>
-</header>
+{% include 'core/components/top_bar.html' %}
 
 <div class="page-content-wrapper">
-    <h2 class="section-title">ADICIONAR LIVRO</h2>
+    <h2 class="section-title">
+        {% if editando %}
+        EDITAR LIVRO
+        {% else %}
+        ADICIONAR LIVRO
+        {% endif %}
+    </h2>
 
     <div class="add-book-wrapper">
         <div class="add-book-form-side">
@@ -53,13 +39,18 @@
 
         <div class="add-book-photo-side">
             <div class="book-cover-preview" id="imagePreview">
-                <span class="placeholder-text">Sem Capa</span>
+                {% if form.instance.capa %}
+                    <img src="{{ form.instance.capa.url }}" alt="Capa atual do livro">
+                {% else %}
+                    <span class="placeholder-text">Sem Capa</span>
+                {% endif %}
             </div>
 
-            <label for="id_capa" class="btn-blue-action" style="cursor: pointer; display: inline-block; text-align: center; width: 100%; box-sizing: border-box;">
+            <label for="id_capa" class="btn-blue-action"
+                style="cursor: pointer; display: inline-block; text-align: center; width: 100%; box-sizing: border-box;">
                 Upload da Capa
             </label>
-            
+
             <p style="font-size: 12px; color: #666; text-align: center; margin-top: 8px;">
                 (Selecione o arquivo e clique em Confirmar)
             </p>

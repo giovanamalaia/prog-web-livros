@@ -5,7 +5,7 @@
     
     <div class="slider-container">
         {% for livro in books_list %}
-        <div class="book-card">
+        <a href="{% url 'detalhe_livro' livro.id %}" class="book-card" style="text-decoration: none; color: inherit; display: block;">
             <div class="book-cover-wrapper">
                 {% if livro.capa %}
                     <img src="{{ livro.capa.url }}" alt="{{ livro.titulo }}">
@@ -15,7 +15,7 @@
             </div>
             <h4 class="book-title">{{ livro.titulo }}</h4>
             <p class="book-author">{{ livro.autor }}</p>
-        </div>
+        </a>
         {% empty %}
             <p class="empty-msg">Nenhum livro encontrado nesta seção.</p>
         {% endfor %}
