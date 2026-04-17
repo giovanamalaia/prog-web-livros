@@ -4,15 +4,15 @@
 {% block title %}Login{% endblock %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'core/css/auth/auth.css' %}">
+<link rel="stylesheet" href="{% static 'core/css/auth/auth.css' %}">
 {% endblock %}
 
 {% block content %}
 <div class="auth-page-wrapper">
-    
+
     <div class="auth-visual-side">
         <div class="logo-container">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+            <i class="fa-solid fa-book"></i>
             <span>Livrô</span>
         </div>
     </div>
@@ -30,7 +30,7 @@
 
             <form method="post" class="custom-form">
                 {% csrf_token %}
-                
+
                 {{ form.as_p }}
 
                 <button type="submit" class="btn-submit">Entrar</button>

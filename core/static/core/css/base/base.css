@@ -32,14 +32,9 @@ main.main-wrapper {
     gap: 12px;
 }
 
-.sidebar-brand {
-    width: 44px;
-    height: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid #e6e6e6;
-    border-radius: 12px;
+.sidebar-brand i {
+    font-size: 28px; 
+    color: #111;    
 }
 
 .sidebar-brand-placeholder {
@@ -269,7 +264,7 @@ main.main-wrapper {
     gap: 10px;
 }
 
-.slider-header .view-all {
+.slider-header {
     font-size: 13px;
     color: #666;
     text-decoration: underline;
@@ -351,4 +346,62 @@ main.main-wrapper {
 .empty-msg {
     color: #888;
     font-style: italic;
+}
+
+/* header do perfil */
+.user-profile-header {
+    display: flex;
+    align-items: center;
+    gap: 25px; 
+    margin-bottom: 50px;
+}
+
+.profile-large-avatar {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15); 
+}
+
+.user-profile-info h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #111;
+    margin: 0 0 5px 0;
+}
+
+.user-profile-info p {
+    font-size: 15px;
+    color: #444;
+    margin: 0;
+}
+
+/* botao add novo livro */
+.user-books-section {
+    margin-bottom: 40px;
+}
+
+.btn-adicionar-livro {
+    background-color: #0ea5e9; 
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px; 
+    margin-top: 10px;
+    transition: background-color 0.2s;
+}
+
+.btn-adicionar-livro:hover {
+    background-color: #0284c7;
+}
+
+.btn-adicionar-livro svg {
+    margin-right: 2px;
 }

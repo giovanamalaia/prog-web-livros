@@ -66,3 +66,14 @@ def home(request):
         'active_page': 'home' 
     }
     return render(request, 'core/pages/home.html', context)
+
+
+def perfil(request): 
+    # filtro os livros onde o dono é o usuário que está logado atualmente
+    meus_livros = Livro.objects.filter(dono=request.user).order_by('-data_adicao')
+    
+    context = {
+        'active_page': 'perfil',
+        'meus_livros': meus_livros 
+    }
+    return render(request, 'core/pages/perfil.html', context)
