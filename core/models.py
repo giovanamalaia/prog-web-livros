@@ -32,6 +32,7 @@ class Livro(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='disponivel')
     isbn = models.CharField(max_length=13, blank=True, null=True)
     dono = models.ForeignKey(User, on_delete=models.CASCADE, related_name='livros')
+    data_adicao = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.titulo} por {self.autor}"
