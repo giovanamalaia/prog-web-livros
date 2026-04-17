@@ -1,7 +1,7 @@
 {% extends 'core/layouts/base.html' %}
 {% load static %}
 
-{% block title %}Perfil{% endblock %} 
+{% block title %}Home{% endblock %} 
 
 {% block content %} 
 {% if user.is_authenticated %} 
@@ -22,7 +22,11 @@
         </div>
     </header>
 
-    </div>
+    <div class="page-content-wrapper">
+        
+        {% include 'core/components/book_slider.html' with section_title="LATEST" books_list=latest_books %}
+        
+        </div>
 
 {% else %} 
     <script>window.location.href = "{% url 'login' %}";</script>

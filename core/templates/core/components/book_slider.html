@@ -1,0 +1,23 @@
+<div class="book-slider-section">
+    <div class="slider-header">
+        <h3>{{ section_title }} <a href="#" class="view-all">(view all)</a></h3>
+    </div>
+    
+    <div class="slider-container">
+        {% for livro in books_list %}
+        <div class="book-card">
+            <div class="book-cover-wrapper">
+                {% if livro.capa %}
+                    <img src="{{ livro.capa.url }}" alt="{{ livro.titulo }}">
+                {% else %}
+                    <div class="placeholder-capa">Sem Capa</div>
+                {% endif %}
+            </div>
+            <h4 class="book-title">{{ livro.titulo }}</h4>
+            <p class="book-author">{{ livro.autor }}</p>
+        </div>
+        {% empty %}
+            <p class="empty-msg">Nenhum livro encontrado nesta seção.</p>
+        {% endfor %}
+    </div>
+</div>

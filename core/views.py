@@ -3,6 +3,7 @@ from django.contrib import messages
 from .forms import RegistroForm
 from .forms import LoginForm
 from django.contrib.auth import login as auth_login, logout as auth_logout
+from .models import Livro
  
  
 def home(request):
@@ -54,3 +55,14 @@ def perfil(request):
 
 def configuracoes(request):  
     return render(request, 'core/pages/configuracoes.html', {'active_page': 'configuracoes'})  
+
+
+def home(request):
+    # pega os 10 últimos livros adicionados 
+    latest_books = Livro.objects.filter(disponivel=True).order_by('-data_adicao')[:10]
+    
+    context = {
+        'latest_books': latest_books,
+        'active_page': 'home' 
+    }
+    return render(request, 'core/pages/home.html', context)
