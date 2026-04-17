@@ -29,13 +29,12 @@ class RegistroForm(UserCreationForm):
 class LivroForm(ModelForm):
     class Meta:
         model = Livro
-        fields = ['titulo', 'autor', 'estado', 'capa', 'isbn'] 
+        fields = ['titulo', 'autor', 'estado', 'capa'] 
         labels = {
             'titulo': 'Título',
             'autor': 'Autor',
             'estado': 'Estado',
             'capa': 'Capa',
-            'isbn': 'ISBN', 
         }
 
     #dono vem do usuário logado e status começa como disponível inicialmente, então não precisa do formulário para isso

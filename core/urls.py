@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import home, registro, login, logout, favoritos, perfil, configuracoes
+from .views import home, registro, login, logout, favoritos, perfil, configuracoes, adicionar_livro
 
 urlpatterns = [
     # INICIAL (localhost:8000/)
@@ -25,4 +25,7 @@ urlpatterns = [
 
     # configurações (localhost:8000/configuracoes/)
     path('configuracoes/', configuracoes, name='configuracoes'), 
+
+    # 👇 E aqui tiramos o "views." da frente
+    path('adicionar-livro/', adicionar_livro, name='adicionar_livro'),
 ]

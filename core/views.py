@@ -4,6 +4,11 @@ from .forms import RegistroForm
 from .forms import LoginForm
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from .models import Livro
+from django.contrib.auth.decorators import login_required
+from .forms import LivroForm
+import json
+import urllib.request
+from django.core.files.base import ContentFile
  
  
 def home(request):
@@ -77,3 +82,25 @@ def perfil(request):
         'meus_livros': meus_livros 
     }
     return render(request, 'core/pages/perfil.html', context)
+
+
+@login_required(login_url='login_raiz')
+def adicionar_livro(request):
+    if request.method == 'POST':
+        form = LivroForm(request.POST, request.FILES) 
+        
+        if form.is_valid():
+            livro = form.save(commit=False) # salva "em pausa"
+            livro.dono = request.user       # define o dono do livro
+            livro.save()                    # salva no banco de dados
+            
+            messages.success(request, 'Livro adicionado com sucesso!')
+            return redirect('perfil') 
+    else:
+        form = LivroForm()
+
+    context = {
+        'form': form,
+        'active_page': 'adicionar_livro'
+    }
+    return render(request, 'core/pages/adicionar_livro.html', context)
