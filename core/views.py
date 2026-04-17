@@ -68,7 +68,7 @@ def home(request):
     if request.user.is_authenticated:
         livros_disponiveis = livros_disponiveis.exclude(dono=request.user)
     
-    latest_books = livros_disponiveis.order_by('-data_adicao')[:15]
+    latest_books = livros_disponiveis.order_by('-data_adicao')[:20]
     
     context = {
         'latest_books': latest_books,

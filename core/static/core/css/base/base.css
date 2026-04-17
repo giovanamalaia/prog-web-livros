@@ -1,3 +1,12 @@
+html, body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    background: #F1EEE3;
+}
+
 main.main-wrapper {
     padding: 0;
 }
@@ -5,10 +14,10 @@ main.main-wrapper {
 .app-layout {
     display: flex;
     flex-direction: row;
-    height: 100vh;
+    min-height: 100vh;
     width: 100%;
     background: #F1EEE3;
-    overflow: hidden; 
+    overflow: hidden;
     margin: 0;
     padding: 0;
 }
@@ -86,6 +95,7 @@ main.main-wrapper {
     padding: 40px 60px;
     display: flex;
     flex-direction: column;
+    min-width: 0; 
 }
 
 .top-bar {
@@ -246,7 +256,9 @@ main.main-wrapper {
 
 /* carrosel de livros */
 .page-content-wrapper {
-    margin-top: 40px; 
+    margin-top: 40px;
+    min-width: 0; /* necessário quando está dentro de um container flex */
+    max-width: 100%;
 }
 
 .book-slider-section {
@@ -274,23 +286,32 @@ main.main-wrapper {
 
 .slider-container {
     display: flex;
-    gap: 25px;
-    overflow-x: auto; 
-    padding-bottom: 15px; 
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none; 
+    gap: 20px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 15px;
+    scroll-behavior: smooth;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x;
 }
 
+
 .slider-container::-webkit-scrollbar {
-    display: none;
+    height: 8px;
 }
 
 /* card do livro */
 .book-card {
     flex: 0 0 auto; 
-    width: 150px; 
-    scroll-snap-align: start;
-    cursor: pointer;
+    width: 160px; 
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: transform 0.2s ease; 
 }
 
 .book-cover-wrapper {
