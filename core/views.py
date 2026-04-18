@@ -151,10 +151,14 @@ def adicionar_livro(request):
 def detalhe_livro(request, livro_id):
     # busca livro pelo id 
     livro = get_object_or_404(Livro, id=livro_id)
+    tem_interesse = False
+    if request.user.is_authenticated:
+        tem_interesse = Interesse.objects.filter(usuario=request.user, livro=livro).exists()
     
     context = {
         'livro': livro,
-        'active_page': 'home'
+        'active_page': 'home',
+        'tem_interesse': tem_interesse
     }
     return render(request, 'core/pages/detalhe_livro.html', context)
 
@@ -213,3 +217,25 @@ def criar_interesse(request, livro_id):
         messages.info(request, 'Você já demonstrou interesse nesse livro.')
 
     return redirect('detalhe_livro', livro_id=livro.id)
+
+@login_required(login_url='login_raiz')
+@require_POST
+def excluir_interesse(request, livro_id):
+    Interesse.objects.filter(usuario=request.user, livro_id=livro_id).delete()
+    return redirect('detalhe_livro', livro_id=livro_id)
+
+
+@login_required(login_url='login_raiz')
+def favoritos(request):
+    interesses = (
+        Interesse.objects.filter(usuario=request.user)
+        .select_related('livro')
+        .order_by('-data')
+    )
+    interesses_books = [i.livro for i in interesses]
+
+    return render(request, 'core/pages/favoritos.html', {
+        'active_page': 'favoritos',
+        'interesses_books': interesses_books,
+    })
+

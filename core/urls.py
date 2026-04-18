@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import home, registro, login, logout, favoritos, perfil, configuracoes, adicionar_livro, detalhe_livro, editar_livro, excluir_livro, criar_interesse
+from .views import home, registro, login, logout, favoritos, perfil, configuracoes, adicionar_livro, detalhe_livro, editar_livro, excluir_livro, criar_interesse, excluir_interesse
 
 urlpatterns = [
     # INICIAL (localhost:8000/)
@@ -36,5 +36,8 @@ urlpatterns = [
     path('excluir-livro/<int:livro_id>/', excluir_livro, name='excluir_livro'),
 
     path('livro/<int:livro_id>/interesse/', criar_interesse, name='criar_interesse'),
+
+    path('livro/<int:livro_id>/interesse/excluir/', excluir_interesse, name='excluir_interesse'),
+
 
 ]
