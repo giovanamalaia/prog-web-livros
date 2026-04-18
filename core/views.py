@@ -9,6 +9,7 @@ from .forms import LivroForm
 import json
 import urllib.request
 from django.core.files.base import ContentFile
+from django.views.decorators.http import require_POST
 
 def home(request):
     return render(request, 'core/pages/home.html', {'active_page': 'home'})  # define qual ícone fica "ativo" na sidebar
@@ -120,6 +121,16 @@ def detalhe_livro(request, livro_id):
         'active_page': 'home'
     }
     return render(request, 'core/pages/detalhe_livro.html', context)
+
+
+@login_required(login_url='login_raiz')
+@require_POST
+def excluir_livro(request, livro_id):
+    livro = get_object_or_404(Livro, id=livro_id, dono=request.user)
+    livro.delete()
+    messages.success(request, 'Livro excluído com sucesso!')
+    return redirect('perfil')
+
 
 @login_required(login_url='login_raiz')
 def editar_livro(request, livro_id):

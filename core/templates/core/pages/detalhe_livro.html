@@ -62,13 +62,21 @@
 
             <hr class="book-divider">
 
-            <div class="book-actions">
-                {% if request.user == livro.dono %}
-                <a href="{% url 'editar_livro' livro.id %}" class="btn-blue-action"
-                    style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+            {% if request.user == livro.dono %}
+                <div style="display:flex; flex-direction:column; align-items:flex-start; gap:12px;">
+                    <a href="{% url 'editar_livro' livro.id %}" class="btn-blue-action"
+                    style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px; margin-bottom: 0;">
                     <i class="fa-solid fa-pen"></i> Editar Livro
-                </a>
+                    </a>
 
+                    <form method="post" action="{% url 'excluir_livro' livro.id %}" style="margin:0;"
+                        onsubmit="return confirm('Tem certeza que deseja excluir este livro?');">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-danger-action" style="display:inline-flex; align-items:center; gap:8px;">
+                        <i class="fa-solid fa-trash"></i> Excluir Livro
+                    </button>
+                    </form>
+                </div>
                 {% else %}
                 <button class="btn-blue-action">
                     <i class="fa-solid fa-book-open"></i> Tenho Interesse
