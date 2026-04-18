@@ -10,9 +10,36 @@ import json
 import urllib.request
 from django.core.files.base import ContentFile
 from django.views.decorators.http import require_POST
+from django.db.models import Q
+
+# def home(request):
+#     return render(request, 'core/pages/home.html', {'active_page': 'home'})  # define qual ícone fica "ativo" na sidebar
 
 def home(request):
-    return render(request, 'core/pages/home.html', {'active_page': 'home'})  # define qual ícone fica "ativo" na sidebar
+    livros_disponiveis = Livro.objects.filter(disponivel=True)
+
+    if request.user.is_authenticated:
+        livros_disponiveis = livros_disponiveis.exclude(dono=request.user)
+
+    q = request.GET.get('q', '').strip()
+    if q:
+        termos = [termo for termo in q.split() if termo]
+        for termo in termos:
+            livros_disponiveis = livros_disponiveis.filter(
+                Q(titulo__istartswith=termo)
+                | Q(titulo__icontains=f" {termo}")
+                | Q(autor__istartswith=termo)
+                | Q(autor__icontains=f" {termo}")
+            )
+        latest_books = livros_disponiveis.order_by('-data_adicao')  # sem limitar quando pesquisa
+    else:
+        latest_books = livros_disponiveis.order_by('-data_adicao')[:20]
+
+    context = {
+        'latest_books': latest_books,
+        'active_page': 'home',
+    }
+    return render(request, 'core/pages/home.html', context)
 
 def registro(request):
     if request.method == 'POST':
@@ -54,28 +81,35 @@ def favoritos(request):
     return render(request, 'core/pages/favoritos.html', {'active_page': 'favoritos'})  
 
 
-def perfil(request): 
-    return render(request, 'core/pages/perfil.html', {'active_page': 'perfil'}) 
+# def perfil(request): 
+#     return render(request, 'core/pages/perfil.html', {'active_page': 'perfil'}) 
 
 
 def configuracoes(request):  
     return render(request, 'core/pages/configuracoes.html', {'active_page': 'configuracoes'})  
 
 
-def home(request):
-    livros_disponiveis = Livro.objects.filter(disponivel=True)
+# def home(request):
+#     livros_disponiveis = Livro.objects.filter(disponivel=True)
     
-    # livros do usuario logado nao aparecem na lista
-    if request.user.is_authenticated:
-        livros_disponiveis = livros_disponiveis.exclude(dono=request.user)
+#     # livros do usuario logado nao aparecem na lista
+#     if request.user.is_authenticated:
+#         livros_disponiveis = livros_disponiveis.exclude(dono=request.user)
+
+#     q = request.GET.get('q', '').strip()
+
+#     if q:
+#         livros_disponiveis = livros_disponiveis.filter(
+#             Q(titulo__icontains=q) | Q(autor__icontains=q)
+#         )
     
-    latest_books = livros_disponiveis.order_by('-data_adicao')[:20]
+#     latest_books = livros_disponiveis.order_by('-data_adicao')[:20]
     
-    context = {
-        'latest_books': latest_books,
-        'active_page': 'home' 
-    }
-    return render(request, 'core/pages/home.html', context)
+#     context = {
+#         'latest_books': latest_books,
+#         'active_page': 'home' 
+#     }
+#     return render(request, 'core/pages/home.html', context)
 
 
 def perfil(request): 
