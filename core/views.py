@@ -4,6 +4,7 @@ from .forms import RegistroForm
 from .forms import LoginForm
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from .models import Livro
+from .models import Interesse
 from django.contrib.auth.decorators import login_required
 from .forms import LivroForm
 import json
@@ -112,6 +113,7 @@ def configuracoes(request):
 #     return render(request, 'core/pages/home.html', context)
 
 
+@login_required(login_url='login_raiz')
 def perfil(request): 
     # filtro os livros onde o dono é o usuário que está logado atualmente
     meus_livros = Livro.objects.filter(dono=request.user).order_by('-data_adicao')
@@ -188,3 +190,26 @@ def editar_livro(request, livro_id):
         'editando': True 
     }
     return render(request, 'core/pages/adicionar_livro.html', context)
+
+@login_required(login_url='login_raiz')
+@require_POST
+def criar_interesse(request, livro_id):
+    livro = get_object_or_404(Livro, id=livro_id)
+
+    if livro.dono == request.user:
+        messages.error(request, 'Você não pode demonstrar interesse no seu próprio livro.')
+        return redirect('detalhe_livro', livro_id=livro.id)
+
+    interesse, criado = Interesse.objects.get_or_create(
+        usuario=request.user,
+        livro=livro,
+        defaults={'status': 'pendente'}
+    )
+
+    if criado:
+        messages.success(request, 'Interesse registrado!')
+
+    else:
+        messages.info(request, 'Você já demonstrou interesse nesse livro.')
+
+    return redirect('detalhe_livro', livro_id=livro.id)

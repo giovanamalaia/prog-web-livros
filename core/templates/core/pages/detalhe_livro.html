@@ -61,7 +61,7 @@
             </div>
 
             <hr class="book-divider">
-
+            <div class="book-actions"></div>
             {% if request.user == livro.dono %}
                 <div style="display:flex; flex-direction:column; align-items:flex-start; gap:12px;">
                     <a href="{% url 'editar_livro' livro.id %}" class="btn-blue-action"
@@ -78,9 +78,12 @@
                     </form>
                 </div>
                 {% else %}
-                <button class="btn-blue-action">
-                    <i class="fa-solid fa-book-open"></i> Tenho Interesse
-                </button>
+                <form method="post" action="{% url 'criar_interesse' livro.id %}" style="margin:0;">
+                {% csrf_token %}
+                    <button type="submit" class="btn-blue-action">
+                        <i class="fa-solid fa-book-open"></i> Tenho Interesse
+                    </button>
+                </form>
                 <button class="btn-heart">
                     <i class="fa-regular fa-heart"></i>
                 </button>
