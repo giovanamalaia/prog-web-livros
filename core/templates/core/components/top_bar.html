@@ -1,8 +1,18 @@
 <header class="top-bar">
-    <div class="search-box">
+    <!-- <div class="search-box">
         <i class="fa-solid fa-magnifying-glass"></i>
         <input type="text" placeholder="Search book, name, author...">
-    </div>
+    </div> -->
+
+    <form class="search-box" method="get" action="{% url 'home' %}">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input
+        type="text"
+        name="q"
+        value="{{ request.GET.q|default:'' }}"
+        placeholder="Search book, name, author..."
+    >
+    </form>
 
     <div class="top-bar-right">
         <button class="lang-toggle">EN 🇬🇧</button>

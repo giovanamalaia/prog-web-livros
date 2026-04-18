@@ -30,13 +30,12 @@
 
         {% include 'core/components/book_slider.html' with section_title="MEUS LIVROS" books_list=meus_livros %}
 
-        <button class="btn-adicionar-livro">
+        <a href="{% url 'adicionar_livro' %}" class="btn-adicionar-livro" style="text-decoration:none;">
             <div class="logo-container">
                 <i class="fa-solid fa-book"></i>
-
             </div>
             Adicionar livro
-        </button>
+        </a>
     </div>
 
 </div>
