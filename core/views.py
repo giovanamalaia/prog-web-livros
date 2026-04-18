@@ -151,14 +151,14 @@ def adicionar_livro(request):
 def detalhe_livro(request, livro_id):
     # busca livro pelo id 
     livro = get_object_or_404(Livro, id=livro_id)
-    tem_interesse = False
-    if request.user.is_authenticated:
-        tem_interesse = Interesse.objects.filter(usuario=request.user, livro=livro).exists()
-    
+    meu_interesse = None
+    if request.user != livro.dono:
+        meu_interesse = Interesse.objects.filter(usuario=request.user, livro=livro).first()
+
     context = {
         'livro': livro,
         'active_page': 'home',
-        'tem_interesse': tem_interesse
+        'meu_interesse': meu_interesse,
     }
     return render(request, 'core/pages/detalhe_livro.html', context)
 
@@ -239,3 +239,27 @@ def favoritos(request):
         'interesses_books': interesses_books,
     })
 
+@login_required(login_url='login_raiz')
+@require_POST
+def aceitar_interesse(request, interesse_id):
+    interesse = get_object_or_404(
+        Interesse,
+        id=interesse_id,
+        livro__dono=request.user
+    )
+    interesse.status = 'aceito'
+    interesse.save()
+    return redirect(request.META.get('HTTP_REFERER', 'home'))
+
+
+@login_required(login_url='login_raiz')
+@require_POST
+def recusar_interesse(request, interesse_id):
+    interesse = get_object_or_404(
+        Interesse,
+        id=interesse_id,
+        livro__dono=request.user
+    )
+    interesse.status = 'recusado'
+    interesse.save()
+    return redirect(request.META.get('HTTP_REFERER', 'home'))

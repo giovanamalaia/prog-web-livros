@@ -78,7 +78,8 @@
                     </form>
                 </div>
                 {% else %}
-                {% if tem_interesse %}
+                {% if meu_interesse %}
+                        Status: {{ meu_interesse.get_status_display }}
                         <form method="post" action="{% url 'excluir_interesse' livro.id %}" style="margin:0;">
                             {% csrf_token %}
                             <button type="submit" class="btn-danger-action" style="display:inline-flex; align-items:center; gap:8px;">

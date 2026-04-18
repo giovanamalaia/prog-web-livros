@@ -1,0 +1,12 @@
+from .models import Interesse
+
+def notificacoes(request):
+    if not request.user.is_authenticated:
+        return {'notificacoes_interesses': []}
+
+    qs = (Interesse.objects
+          .filter(livro__dono=request.user, status='pendente')
+          .select_related('usuario', 'livro')
+          .order_by('-data')[:10])
+
+    return {'notificacoes_interesses': qs}
