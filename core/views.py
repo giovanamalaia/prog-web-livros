@@ -222,7 +222,7 @@ def criar_interesse(request, livro_id):
 @require_POST
 def excluir_interesse(request, livro_id):
     Interesse.objects.filter(usuario=request.user, livro_id=livro_id).delete()
-    return redirect('detalhe_livro', livro_id=livro_id)
+    return redirect('favoritos')
 
 
 @login_required(login_url='login_raiz')
