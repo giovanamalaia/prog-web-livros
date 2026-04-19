@@ -69,8 +69,7 @@
                     <i class="fa-solid fa-pen"></i> Editar Livro
                     </a>
 
-                    <form method="post" action="{% url 'excluir_livro' livro.id %}" style="margin:0;"
-                        onsubmit="return confirm('Tem certeza que deseja excluir este livro?');">
+                    <form method="post" action="{% url 'excluir_livro' livro.id %}" style="margin:0;">
                     {% csrf_token %}
                     <button type="submit" class="btn-danger-action" style="display:inline-flex; align-items:center; gap:8px;">
                         <i class="fa-solid fa-trash"></i> Excluir Livro
