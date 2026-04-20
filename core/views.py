@@ -374,10 +374,15 @@ def aceitar_interesse(request, interesse_id):
     interesse.status = 'aceito'
     interesse.save()
 
+    # Quando o dono aceita, o livro deixa de estar disponível e fica reservado.
+    livro = interesse.livro
+    livro.status = 'reservado'
+    livro.disponivel = False
+    livro.save(update_fields=['status', 'disponivel'])
+
     # disparo email do match
     dono = interesse.livro.dono
     interessado = interesse.usuario
-    livro = interesse.livro
 
     nome_dono = dono.first_name or dono.username
     nome_interessado = interessado.first_name or interessado.username

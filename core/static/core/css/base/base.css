@@ -738,6 +738,8 @@ main.main-wrapper {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    /* não bloqueia cliques nos elementos atrás (ex.: sino de notificações) */
+    pointer-events: none;
 }
 
 .toast-message {
