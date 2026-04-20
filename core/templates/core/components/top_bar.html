@@ -1,10 +1,14 @@
 {% load i18n %}
 {% get_current_language as LANGUAGE_CODE %}
 <header class="top-bar">
-    <form class="search-box" method="get" action="{% url 'home' %}">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" name="q" value="{{ request.GET.q|default:'' }}" placeholder="{% trans 'Pesquisar livro, nome, autor...' %}">
-    </form>
+    {% with current_page=request.resolver_match.url_name %}
+        {% if current_page == 'home' or current_page == 'favoritos' %}
+            <form class="search-box" method="get" action="{% url current_page %}">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" name="q" value="{{ request.GET.q|default:'' }}" placeholder="{% trans 'Pesquisar livro, nome, autor...' %}">
+            </form>
+        {% endif %}
+    {% endwith %}
 
     <div class="top-bar-right">
         <form action="{% url 'trocar_idioma' %}" method="post">

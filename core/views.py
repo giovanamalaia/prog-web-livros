@@ -343,6 +343,19 @@ def favoritos(request):
         .select_related('livro')
         .order_by('-data')
     )
+
+    # pesquisa (na lista de interesses)
+    q = request.GET.get('q', '').strip()
+    if q:
+        termos = [termo for termo in q.split() if termo]
+        for termo in termos:
+            interesses = interesses.filter(
+                Q(livro__titulo__istartswith=termo)
+                | Q(livro__titulo__icontains=f" {termo}")
+                | Q(livro__autor__istartswith=termo)
+                | Q(livro__autor__icontains=f" {termo}")
+            )
+
     interesses_books = [i.livro for i in interesses]
 
     return render(request, 'core/pages/favoritos.html', {
