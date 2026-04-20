@@ -14,9 +14,8 @@ import urllib.request
 from django.core.files.base import ContentFile
 from django.views.decorators.http import require_POST
 from django.db.models import Q
-
-# def home(request):
-#     return render(request, 'core/pages/home.html', {'active_page': 'home'})  # define qual ícone fica "ativo" na sidebar
+from django.core.mail import send_mail
+from django.conf import settings
 
 @login_required(login_url='login_raiz')
 def home(request):
@@ -100,36 +99,9 @@ def favoritos(request):
     return render(request, 'core/pages/favoritos.html', {'active_page': 'favoritos'})  
 
 
-# def perfil(request): 
-#     return render(request, 'core/pages/perfil.html', {'active_page': 'perfil'}) 
-
-
 @login_required(login_url='login_raiz')
 def configuracoes(request):
     return render(request, 'core/pages/configuracoes.html', {'active_page': 'configuracoes'})
-
-
-# def home(request):
-#     livros_disponiveis = Livro.objects.filter(disponivel=True)
-    
-#     # livros do usuario logado nao aparecem na lista
-#     if request.user.is_authenticated:
-#         livros_disponiveis = livros_disponiveis.exclude(dono=request.user)
-
-#     q = request.GET.get('q', '').strip()
-
-#     if q:
-#         livros_disponiveis = livros_disponiveis.filter(
-#             Q(titulo__icontains=q) | Q(autor__icontains=q)
-#         )
-    
-#     latest_books = livros_disponiveis.order_by('-data_adicao')[:20]
-    
-#     context = {
-#         'latest_books': latest_books,
-#         'active_page': 'home' 
-#     }
-#     return render(request, 'core/pages/home.html', context)
 
 
 @login_required(login_url='login_raiz')
@@ -238,6 +210,34 @@ def criar_interesse(request, livro_id):
 
     if criado:
         messages.success(request, 'Interesse registrado!')
+        if livro.dono.email: 
+            assunto = f"Boas notícias! Alguém quer seu livro: {livro.titulo}"
+            
+            nome_dono = livro.dono.first_name or livro.dono.username
+            nome_interessado = request.user.username or request.user.first_name
+            
+            mensagem = f"""
+            Olá {nome_dono.title()},
+
+            O usuário {nome_interessado} acabou de demonstrar interesse em trocar o seu livro '{livro.titulo}'.
+
+            Acesse a plataforma para aceitar ou recusar a solicitação!
+
+            Abraços,
+            Equipe do Livrô
+            """
+            
+            try:
+                # dispara email
+                send_mail(
+                    assunto, 
+                    mensagem, 
+                    settings.DEFAULT_FROM_EMAIL, 
+                    [livro.dono.email],        
+                    fail_silently=False         
+                )
+            except Exception as e:
+                print(f"Erro ao tentar enviar email: {e}")
 
     else:
         messages.info(request, 'Você já demonstrou interesse nesse livro.')

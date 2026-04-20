@@ -274,7 +274,7 @@ main.main-wrapper {
 /* carrosel de livros */
 .page-content-wrapper {
     margin-top: 40px;
-    min-width: 0; /* necessário quando está dentro de um container flex */
+    min-width: 0; 
     max-width: 100%;
 }
 
