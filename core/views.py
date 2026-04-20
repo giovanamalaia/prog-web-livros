@@ -3,8 +3,7 @@ from django.contrib import messages
 from .forms import RegistroForm
 from .forms import LoginForm
 from django.contrib.auth import login as auth_login, logout as auth_logout
-from .models import Livro
-from .models import Interesse
+from .models import Livro, Interesse, Perfil
 from django.contrib.auth.decorators import login_required
 from .forms import LivroForm
 from django.urls import reverse
@@ -16,6 +15,7 @@ from django.views.decorators.http import require_POST
 from django.db.models import Q
 from django.core.mail import send_mail
 from django.conf import settings
+from django.contrib.auth.models import User
 
 @login_required(login_url='login_raiz')
 def home(request):
@@ -101,6 +101,41 @@ def favoritos(request):
 
 @login_required(login_url='login_raiz')
 def configuracoes(request):
+    if request.method == 'POST':
+        user = request.user
+        
+        # oq foi digitado
+        novo_username = request.POST.get('username')
+        novo_email = request.POST.get('email')
+        
+        # verifica se o username escolhido ja existe
+        if User.objects.filter(username=novo_username).exclude(id=user.id).exists():
+            messages.error(request, 'Esse username já está em uso por outra conta.')
+            return redirect('configuracoes')
+            
+        # verifica se email ja existe
+        if User.objects.filter(email=novo_email).exclude(id=user.id).exists():
+            messages.error(request, 'Esse e-mail já está cadastrado em outra conta.')
+            return redirect('configuracoes')
+
+        # atualiza 
+        user.username = novo_username
+        user.first_name = request.POST.get('first_name')
+        user.last_name = request.POST.get('last_name')
+        user.email = novo_email
+        user.save()
+
+        perfil, criado = Perfil.objects.get_or_create(user=user)
+        
+        # input da foto
+        if 'foto_perfil' in request.FILES:
+            perfil.foto_perfil = request.FILES.get('foto_perfil')
+            perfil.save()
+            
+        messages.success(request, 'Configurações salvas com sucesso!')
+        return redirect('configuracoes')
+
+    # acessar a pagina
     return render(request, 'core/pages/configuracoes.html', {'active_page': 'configuracoes'})
 
 

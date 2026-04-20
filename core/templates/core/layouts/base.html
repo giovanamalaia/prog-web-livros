@@ -15,11 +15,21 @@
             {% include 'core/layouts/sidebar.html' %}
         {% endif %}
 
-	        <main class="app-content">
-	            {% block content %}
-	            {% endblock %}
-	        </main>
-	        
-	    </div> 
-    </body>
+        {% if messages %}
+            <div class="toast-container">
+                {% for message in messages %}
+                    <div class="toast-message {{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <main class="app-content">
+            {% block content %}
+            {% endblock %}
+        </main>
+            
+    </div> 
+</body>
 </html>

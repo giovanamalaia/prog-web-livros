@@ -3,11 +3,13 @@ from django.contrib.auth.models import User
 
 # model perfil 
 class Perfil(models.Model): 
-    user = models.OneToOneField(User, on_delete=models.CASCADE) 
-    cidade = models.CharField(max_length=100) 
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='perfil') 
+    
+    cidade = models.CharField(max_length=100, blank=True, null=True) 
+    foto_perfil = models.ImageField(upload_to='fotos_perfil/', blank=True, null=True)
 
     def __str__(self):
-        return f"{self.user.username} - {self.cidade}"
+        return f"Perfil de {self.user.username}"
     
 
 # model livro
