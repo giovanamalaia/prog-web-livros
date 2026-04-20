@@ -7,6 +7,8 @@
                 <i class="fa-solid fa-magnifying-glass"></i>
                 <input type="text" name="q" value="{{ request.GET.q|default:'' }}" placeholder="{% trans 'Pesquisar livro, nome, autor...' %}">
             </form>
+        {% else %}
+            <div class="top-bar-left"></div>
         {% endif %}
     {% endwith %}
 

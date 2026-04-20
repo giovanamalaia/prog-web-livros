@@ -139,6 +139,10 @@ main.main-wrapper {
     color: #333;
 }
 
+.top-bar-left {
+    flex: 1;
+}
+
 .top-bar-right {
     display: flex;
     align-items: center;
