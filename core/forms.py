@@ -37,6 +37,9 @@ class LivroForm(ModelForm):
             'estado': 'Estado',
             'capa': 'Capa',
         }
+        widgets = {
+            'capa': forms.FileInput(attrs={'accept': 'image/*'}),
+        }
 
     #dono vem do usuário logado e status começa como disponível inicialmente, então não precisa do formulário para isso
 

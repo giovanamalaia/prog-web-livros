@@ -128,7 +128,7 @@ STATIC_URL = '/static/'  # usa barra inicial para o navegador resolver corretame
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR
+MEDIA_ROOT = BASE_DIR / 'media'
 
 #ENVIANDO EMAIL! 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

@@ -10,7 +10,14 @@
 <div class="page-content-wrapper">
 
     <div class="user-profile-header">
-        <img src="https://i.pravatar.cc/300?img=47" alt="Foto de {{ user.username }}" class="profile-large-avatar">
+        {% if user.perfil.foto_perfil %}
+        <img src="{{ user.perfil.foto_perfil.url }}" alt="Foto de {{ user.username }}" class="profile-large-avatar">
+        {% else %}
+        <div class="avatar-placeholder-large"
+            style="width: 130px; height: 130px; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 5px 15px rgba(0,0,0,0.15); display: flex; align-items: center; justify-content: center; background: #e9ecef; color: #adb5bd; font-size: 50px;">
+            <i class="fa-solid fa-user"></i>
+        </div>
+        {% endif %}
 
         <div class="user-profile-info">
             <h2>
@@ -20,13 +27,11 @@
                 {{ user.username|title }}
                 {% endif %}
             </h2>
-
             <p>{{ user.perfil.cidade|default:"Rio de Janeiro" }}</p>
         </div>
     </div>
 
     <div class="user-books-section">
-
         {% include 'core/components/book_slider.html' with section_title="MEUS LIVROS" books_list=meus_livros %}
 
         <a href="{% url 'adicionar_livro' %}" class="btn-adicionar-livro" style="text-decoration:none;">

@@ -2,7 +2,9 @@
 {% load static %}
 
 {% block title %}{{ livro.titulo }}{% endblock %}
-
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'core/css/books.css' %}">
+{% endblock %}
 {% block content %}
 
 {% include 'core/components/top_bar.html' %}
@@ -31,7 +33,13 @@
                 </div>
 
                 <div class="book-owner-area">
-                    <img src="https://i.pravatar.cc/150?u={{ livro.dono.username }}" alt="Dono">
+                    {% if livro.dono.perfil.foto_perfil %}
+                    <img src="{{ livro.dono.perfil.foto_perfil.url }}" alt="Dono">
+                    {% else %}
+                    <div class="avatar-placeholder-mini" style="width: 35px; height: 35px; font-size: 14px;">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    {% endif %}
                     <span>{{ livro.dono.first_name|default:livro.dono.username|title }}</span>
                 </div>
             </div>
@@ -62,41 +70,43 @@
             <hr class="book-divider">
             <div class="book-actions"></div>
             {% if request.user == livro.dono %}
-                <div style="display:flex; flex-direction:column; align-items:flex-start; gap:12px;">
-                    <a href="{% url 'editar_livro' livro.id %}" class="btn-blue-action"
+            <div style="display:flex; flex-direction:column; align-items:flex-start; gap:12px;">
+                <a href="{% url 'editar_livro' livro.id %}" class="btn-blue-action"
                     style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px; margin-bottom: 0;">
                     <i class="fa-solid fa-pen"></i> Editar Livro
-                    </a>
+                </a>
 
-                    <form method="post" action="{% url 'excluir_livro' livro.id %}" style="margin:0;">
+                <form method="post" action="{% url 'excluir_livro' livro.id %}" style="margin:0;">
                     {% csrf_token %}
-                    <button type="submit" class="btn-danger-action" style="display:inline-flex; align-items:center; gap:8px;">
+                    <button type="submit" class="btn-danger-action"
+                        style="display:inline-flex; align-items:center; gap:8px;">
                         <i class="fa-solid fa-trash"></i> Excluir Livro
                     </button>
-                    </form>
-                </div>
-                {% else %}
-                {% if meu_interesse %}
-                        Status: {{ meu_interesse.get_status_display }}
-                        <form method="post" action="{% url 'excluir_interesse' livro.id %}" style="margin:0;">
-                            {% csrf_token %}
-                            <button type="submit" class="btn-danger-action" style="display:inline-flex; align-items:center; gap:8px;">
-                                <i class="fa-solid fa-trash"></i> Excluir interesse
-                            </button>
-                        </form>
-                    {% else %}
-                        <form method="post" action="{% url 'criar_interesse' livro.id %}" style="margin:0;">
-                            {% csrf_token %}
-                            <button type="submit" class="btn-blue-action">
-                                <i class="fa-solid fa-book-open"></i> Tenho Interesse
-                            </button>
-                        </form>
-                    {% endif %}
-                {% endif %}
+                </form>
             </div>
-
+            {% else %}
+            {% if meu_interesse %}
+            Status: {{ meu_interesse.get_status_display }}
+            <form method="post" action="{% url 'excluir_interesse' livro.id %}" style="margin:0;">
+                {% csrf_token %}
+                <button type="submit" class="btn-danger-action"
+                    style="display:inline-flex; align-items:center; gap:8px;">
+                    <i class="fa-solid fa-trash"></i> Excluir interesse
+                </button>
+            </form>
+            {% else %}
+            <form method="post" action="{% url 'criar_interesse' livro.id %}" style="margin:0;">
+                {% csrf_token %}
+                <button type="submit" class="btn-blue-action">
+                    <i class="fa-solid fa-book-open"></i> Tenho Interesse
+                </button>
+            </form>
+            {% endif %}
+            {% endif %}
         </div>
+
     </div>
+</div>
 </div>
 
 {% endblock %}

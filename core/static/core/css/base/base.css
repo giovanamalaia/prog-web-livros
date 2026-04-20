@@ -158,8 +158,7 @@ main.main-wrapper {
     display: flex;
     align-items: center;
     gap: 12px;
-    font-weight: 600;
-    font-size: 15px;
+    white-space: nowrap; 
 }
 
 .avatar-placeholder-mini {
@@ -177,7 +176,12 @@ main.main-wrapper {
 }
 
 .avatar-mini {
-    object-fit: cover;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%; 
+    object-fit: cover;  
+    display: block;     
+    border: 2px solid #fff; 
 }
 
 .bell-icon {
@@ -429,8 +433,9 @@ main.main-wrapper {
     width: 130px;
     height: 130px;
     border-radius: 50%;
-    object-fit: cover;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.15); 
+    object-fit: cover; 
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    border: 3px solid #fff;
 }
 
 .user-profile-info h2 {
@@ -500,6 +505,7 @@ main.main-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 14px;
 }
 
 .book-cover-preview {
@@ -525,6 +531,46 @@ main.main-wrapper {
     color: #888;
     font-size: 14px;
     font-weight: 600;
+}
+
+.cover-upload-field {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+}
+
+.cover-upload-field label {
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.cover-upload-field input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #111;
+    border-radius: 12px;
+    background: #fff;
+    box-sizing: border-box;
+    font-size: 13px;
+}
+
+.cover-upload-field input[type="file"]::file-selector-button {
+    border: none;
+    background: #111;
+    color: #fff;
+    border-radius: 8px;
+    padding: 8px 12px;
+    margin-right: 12px;
+    cursor: pointer;
+}
+
+.upload-cover-hint {
+    color: #666;
+    font-size: 12px;
+    line-height: 1.4;
+    margin: 0;
+    max-width: 320px;
 }
 
 
@@ -618,7 +664,8 @@ main.main-wrapper {
     width: 35px;
     height: 35px;
     border-radius: 50%;
-    object-fit: cover;
+    object-fit: cover; 
+    border: 1px solid #e0dcd3;
 }
 
 .book-owner-area span {
