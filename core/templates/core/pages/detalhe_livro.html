@@ -4,15 +4,14 @@
 {% block title %}{{ livro.titulo }}{% endblock %}
 
 {% block content %}
-{% if user.is_authenticated %}
 
 {% include 'core/components/top_bar.html' %}
 
 <div class="page-content-wrapper">
 
-    <button onclick="history.back()" class="btn-back">
+    <a href="{{ back_url }}" class="btn-back" style="text-decoration: none;">
         <i class="fa-solid fa-angle-left"></i> Back
-    </button>
+    </a>
 
     <div class="book-detail-container">
 
@@ -100,5 +99,4 @@
     </div>
 </div>
 
-{% endif %}
 {% endblock %}

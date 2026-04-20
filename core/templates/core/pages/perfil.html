@@ -4,7 +4,6 @@
 {% block title %}Perfil{% endblock %}
 
 {% block content %}
-{% if user.is_authenticated %}
 
 {% include 'core/components/top_bar.html' %}
 
@@ -40,7 +39,4 @@
 
 </div>
 
-{% else %}
-<script>window.location.href = "{% url 'login' %}";</script>
-{% endif %}
 {% endblock %}

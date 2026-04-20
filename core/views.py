@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib import messages 
+from django.contrib import messages
 from .forms import RegistroForm
 from .forms import LoginForm
 from django.contrib.auth import login as auth_login, logout as auth_logout
@@ -7,6 +7,8 @@ from .models import Livro
 from .models import Interesse
 from django.contrib.auth.decorators import login_required
 from .forms import LivroForm
+from django.urls import reverse
+from urllib.parse import urlparse
 import json
 import urllib.request
 from django.core.files.base import ContentFile
@@ -16,12 +18,14 @@ from django.db.models import Q
 # def home(request):
 #     return render(request, 'core/pages/home.html', {'active_page': 'home'})  # define qual ícone fica "ativo" na sidebar
 
+@login_required(login_url='login_raiz')
 def home(request):
     livros_disponiveis = Livro.objects.filter(disponivel=True)
 
     if request.user.is_authenticated:
         livros_disponiveis = livros_disponiveis.exclude(dono=request.user)
 
+    # pesquisa
     q = request.GET.get('q', '').strip()
     if q:
         termos = [termo for termo in q.split() if termo]
@@ -36,8 +40,22 @@ def home(request):
     else:
         latest_books = livros_disponiveis.order_by('-data_adicao')[:20]
 
+    # generos
+    livros_por_genero = []
+    
+    for slug_genero, nome_bonito in Livro.GENERO_CHOICES:
+        livros_do_genero = livros_disponiveis.filter(genero=slug_genero).order_by('-data_adicao')
+        
+        # so entra se tiver livros no genero
+        if livros_do_genero.exists():
+            livros_por_genero.append({
+                'titulo_secao': nome_bonito.upper(),
+                'livros': livros_do_genero[:10]
+            })
+
     context = {
         'latest_books': latest_books,
+        'livros_por_genero': livros_por_genero, 
         'active_page': 'home',
     }
     return render(request, 'core/pages/home.html', context)
@@ -86,8 +104,9 @@ def favoritos(request):
 #     return render(request, 'core/pages/perfil.html', {'active_page': 'perfil'}) 
 
 
-def configuracoes(request):  
-    return render(request, 'core/pages/configuracoes.html', {'active_page': 'configuracoes'})  
+@login_required(login_url='login_raiz')
+def configuracoes(request):
+    return render(request, 'core/pages/configuracoes.html', {'active_page': 'configuracoes'})
 
 
 # def home(request):
@@ -149,16 +168,23 @@ def adicionar_livro(request):
 
 @login_required(login_url='login_raiz')
 def detalhe_livro(request, livro_id):
-    # busca livro pelo id 
     livro = get_object_or_404(Livro, id=livro_id)
+
     meu_interesse = None
     if request.user != livro.dono:
         meu_interesse = Interesse.objects.filter(usuario=request.user, livro=livro).first()
+
+    back_url = request.META.get('HTTP_REFERER')
+    if back_url:
+        parsed = urlparse(back_url)
+        if (parsed.scheme and parsed.scheme not in ('http', 'https')) or (parsed.netloc and parsed.netloc != request.get_host()):
+            back_url = None
 
     context = {
         'livro': livro,
         'active_page': 'home',
         'meu_interesse': meu_interesse,
+        'back_url': back_url or reverse('home'),
     }
     return render(request, 'core/pages/detalhe_livro.html', context)
 
