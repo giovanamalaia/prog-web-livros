@@ -275,6 +275,52 @@ def aceitar_interesse(request, interesse_id):
     )
     interesse.status = 'aceito'
     interesse.save()
+
+    # disparo email do match
+    dono = interesse.livro.dono
+    interessado = interesse.usuario
+    livro = interesse.livro
+
+    nome_dono = dono.first_name or dono.username
+    nome_interessado = interessado.first_name or interessado.username
+
+    # email para o dono
+    if dono.email:
+        assunto_dono = f"Match! Você aceitou trocar: {livro.titulo}"
+        msg_dono = f"""Olá {nome_dono.title()},
+
+Você acabou de aceitar a solicitação de {nome_interessado.title()} para o livro '{livro.titulo}'.
+
+Para combinar a troca (local, horário ou envio), entre em contato diretamente pelo e-mail:
+📧 {interessado.email}
+
+Boas trocas!
+Equipe do Livrô"""
+
+        try:
+            send_mail(assunto_dono, msg_dono, settings.DEFAULT_FROM_EMAIL, [dono.email], fail_silently=True)
+        except Exception as e:
+            print(f"Erro ao enviar e-mail para o dono: {e}")
+
+    # email para o interessado
+    if interessado.email:
+        assunto_interessado = f"Deu Match! Seu interesse em {livro.titulo} foi aceito!"
+        msg_interessado = f"""Olá {nome_interessado.title()},
+
+Ótimas notícias! O usuário {nome_dono.title()} aceitou o seu interesse pelo livro '{livro.titulo}'.
+
+Para combinar os detalhes da troca, mande um e-mail para:
+📧 {dono.email}
+
+Boas trocas!
+Equipe do Livrô"""
+
+        try:
+            send_mail(assunto_interessado, msg_interessado, settings.DEFAULT_FROM_EMAIL, [interessado.email], fail_silently=True)
+        except Exception as e:
+            print(f"Erro ao enviar e-mail para o interessado: {e}")
+
+    messages.success(request, 'Interesse aceito! Os e-mails de contato foram enviados para os dois.')
     return redirect(request.META.get('HTTP_REFERER', 'home'))
 
 
@@ -288,4 +334,27 @@ def recusar_interesse(request, interesse_id):
     )
     interesse.status = 'recusado'
     interesse.save()
+
+    # interesse recusado
+    interessado = interesse.usuario
+    livro = interesse.livro
+    nome_interessado = interessado.first_name or interessado.username
+
+    if interessado.email:
+        assunto_interessado = f"Atualização sobre o livro: {livro.titulo}"
+        msg_interessado = f"""Olá {nome_interessado.title()},
+
+Infelizmente, o dono do livro '{livro.titulo}' não pôde aceitar a sua solicitação de troca neste momento. O livro pode já ter sido prometido a outra pessoa.
+
+Não desanime! Continue explorando a plataforma para encontrar outras opções incríveis.
+
+Abraços,
+Equipe do Livrô"""
+
+        try:
+            send_mail(assunto_interessado, msg_interessado, settings.DEFAULT_FROM_EMAIL, [interessado.email], fail_silently=True)
+        except Exception as e:
+            print(f"Erro ao enviar e-mail de recusa: {e}")
+
+    messages.info(request, 'O interesse foi recusado e o usuário foi notificado.')
     return redirect(request.META.get('HTTP_REFERER', 'home'))
