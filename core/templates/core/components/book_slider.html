@@ -6,7 +6,8 @@
     
     <div class="slider-container">
         {% for livro in books_list %}
-        <a href="{% url 'detalhe_livro' livro.id %}" class="book-card" style="text-decoration: none; color: inherit; display: block;">
+        {# Passa a URL atual em ?next= para o botão "Back" funcionar #}
+        <a href="{% url 'detalhe_livro' livro.id %}?next={{ request.get_full_path|urlencode }}" class="book-card" style="text-decoration: none; color: inherit; display: block;">
             <div class="book-cover-wrapper">
                 {% if livro.capa %}
                     <img src="{{ livro.capa.url }}" alt="{{ livro.titulo }}">

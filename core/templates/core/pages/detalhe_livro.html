@@ -94,6 +94,8 @@
             {% trans "Status" %}: {{ meu_interesse.get_status_display }}
             <form method="post" action="{% url 'excluir_interesse' livro.id %}" style="margin:0;">
                 {% csrf_token %}
+                {# Mantém a origem pra não quebrar o "Voltar" depois do POST #}
+                <input type="hidden" name="next" value="{{ back_url }}">
                 <button type="submit" class="btn-danger-action"
                     style="display:inline-flex; align-items:center; gap:8px;">
                     <i class="fa-solid fa-trash"></i> {% trans "Excluir interesse" %}
@@ -102,6 +104,8 @@
             {% else %}
             <form method="post" action="{% url 'criar_interesse' livro.id %}" style="margin:0;">
                 {% csrf_token %}
+                {# Mantém a origem pra não quebrar o "Voltar" depois do POST #}
+                <input type="hidden" name="next" value="{{ back_url }}">
                 <button type="submit" class="btn-blue-action">
                     <i class="fa-solid fa-book-open"></i> {% trans "Tenho interesse" %}
                 </button>

@@ -7,7 +7,7 @@ from .models import Livro, Interesse, Perfil
 from django.contrib.auth.decorators import login_required
 from .forms import LivroForm
 from django.urls import reverse
-from urllib.parse import urlparse
+from urllib.parse import urlparse, urlencode
 import json
 import urllib.request
 from django.core.files.base import ContentFile
@@ -210,7 +210,9 @@ def detalhe_livro(request, livro_id):
     if request.user != livro.dono:
         meu_interesse = Interesse.objects.filter(usuario=request.user, livro=livro).first()
 
-    back_url = request.META.get('HTTP_REFERER')
+    # "Voltar": tentamos preservar de onde o usuário veio via ?next=
+    # (fallback para HTTP_REFERER quando não vier esse parâmetro).
+    back_url = request.GET.get('next') or request.META.get('HTTP_REFERER')
     if back_url:
         parsed = urlparse(back_url)
         if (parsed.scheme and parsed.scheme not in ('http', 'https')) or (parsed.netloc and parsed.netloc != request.get_host()):
@@ -261,10 +263,19 @@ def editar_livro(request, livro_id):
 @require_POST
 def criar_interesse(request, livro_id):
     livro = get_object_or_404(Livro, id=livro_id)
+    # Guardamos a origem pra não perder o "Voltar" após o POST/redirect.
+    next_url = request.POST.get('next') or ''
+    if next_url:
+        parsed = urlparse(next_url)
+        if (parsed.scheme and parsed.scheme not in ('http', 'https')) or (parsed.netloc and parsed.netloc != request.get_host()):
+            next_url = ''
 
     if livro.dono == request.user:
         messages.error(request, _('Você não pode demonstrar interesse no seu próprio livro.'))
-        return redirect('detalhe_livro', livro_id=livro.id)
+        url = reverse('detalhe_livro', args=[livro.id])
+        if next_url:
+            url = f"{url}?{urlencode({'next': next_url})}"
+        return redirect(url)
 
     interesse, criado = Interesse.objects.get_or_create(
         usuario=request.user,
@@ -307,13 +318,22 @@ def criar_interesse(request, livro_id):
     else:
         messages.info(request, _('Você já demonstrou interesse nesse livro.'))
 
-    return redirect('detalhe_livro', livro_id=livro.id)
+    url = reverse('detalhe_livro', args=[livro.id])
+    if next_url:
+        url = f"{url}?{urlencode({'next': next_url})}"
+    return redirect(url)
 
 @login_required(login_url='login_raiz')
 @require_POST
 def excluir_interesse(request, livro_id):
+    # Se o usuário excluir e voltar, tentamos respeitar a página anterior.
+    next_url = request.POST.get('next') or ''
+    if next_url:
+        parsed = urlparse(next_url)
+        if (parsed.scheme and parsed.scheme not in ('http', 'https')) or (parsed.netloc and parsed.netloc != request.get_host()):
+            next_url = ''
     Interesse.objects.filter(usuario=request.user, livro_id=livro_id).delete()
-    return redirect('favoritos')
+    return redirect(next_url or 'favoritos')
 
 
 @login_required(login_url='login_raiz')
