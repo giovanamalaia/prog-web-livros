@@ -769,7 +769,101 @@ main.main-wrapper {
     100% { 
         transform: translateX(100%); 
         opacity: 0; 
-        pointer-events: none; /* Desativa os cliques para não atrapalhar a tela */
+        pointer-events: none; 
         visibility: hidden;
     }
+}
+
+/* notif e dropdown */
+.notif-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.notif-dropdown {
+    display: none; 
+    position: absolute;
+    right: 0;
+    top: 50px;
+    width: 320px;
+    background-color: #EFBCB3; 
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    z-index: 1000;
+    padding: 15px;
+}
+
+/* mostrar quando clicar */
+#notif-toggle:checked ~ .notif-dropdown {
+    display: block;
+}
+
+.notif-item {
+    display: flex;
+    gap: 12px;
+    padding: 15px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.notif-avatar {
+    width: 45px;
+    height: 45px;
+    background: #E8F0FE;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 14px;
+    flex-shrink: 0;
+    overflow: hidden; 
+    color: #4AA4FF;
+}
+
+.notif-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+}
+
+.notif-body { flex: 1; }
+
+.notif-text { font-size: 13px; line-height: 1.4; color: #111; margin-bottom: 5px; }
+
+.notif-time { font-size: 11px; color: #555; margin-bottom: 10px; }
+
+/* botoes da notificacao */
+.notif-actions { display: flex; gap: 8px; }
+
+.btn-notif-accept {
+    background: #4AA4FF;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-notif-decline {
+    background: white;
+    color: #111;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* Badge do sino */
+.notif-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #ef4444;
+    color: white;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 10px;
+    border: 2px solid #F1EEE3;
 }
