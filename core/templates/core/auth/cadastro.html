@@ -1,7 +1,7 @@
 {% extends 'core/layouts/auth_base.html' %}
-{% load static %}
+{% load static i18n %}
 
-{% block title %}Registration{% endblock %}
+{% block title %}{% trans "Cadastro" %}{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'core/css/auth/auth.css' %}">
@@ -20,24 +20,35 @@
 
     <div class="auth-form-side">
         <div class="top-actions">
-            <button class="lang-toggle">EN 🇬🇧</button>
+            {% get_current_language as LANGUAGE_CODE %}
+            <form action="{% url 'trocar_idioma' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                {% if LANGUAGE_CODE == 'pt-br' %}
+                    <input type="hidden" name="language" value="en">
+                    <button class="lang-toggle" type="submit">PT 🇧🇷</button>
+                {% else %}
+                    <input type="hidden" name="language" value="pt-br">
+                    <button class="lang-toggle" type="submit">EN 🇬🇧</button>
+                {% endif %}
+            </form>
         </div>
 
         <div class="form-container">
             <div class="form-header">
-                <h2>Cadastro</h2>
-                <p>Vamos lá, crie uma conta</p>
+                <h2>{% trans "Cadastro" %}</h2>
+                <p>{% trans "Vamos lá, crie uma conta" %}</p>
             </div>
-            <p class="form-hint">Selecione o estado e clique em "Carregar cidades" para habilitar a lista.</p>
+            <p class="form-hint">{% trans "Selecione o estado e clique em \"Carregar cidades\" para habilitar a lista." %}</p>
 
             <form method="post" class="custom-form">
                 {% csrf_token %} {{ form.as_p }}
 
-                <button type="submit" name="action" value="refresh_cities" class="btn-secondary">Carregar cidades</button>
-                <button type="submit" name="action" value="submit" class="btn-submit">Cadastrar-se</button>
+                <button type="submit" name="action" value="refresh_cities" class="btn-secondary">{% trans "Carregar cidades" %}</button>
+                <button type="submit" name="action" value="submit" class="btn-submit">{% trans "Cadastrar-se" %}</button>
             </form>
 
-            <p class="login-link">Já tem uma conta? <a href="/login">Entrar</a></p>
+            <p class="login-link">{% trans "Já tem uma conta?" %} <a href="/login">{% trans "Entrar" %}</a></p>
         </div>
     </div>
 

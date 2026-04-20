@@ -16,6 +16,8 @@ from django.db.models import Q
 from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.utils import translation
+from django.utils.translation import gettext as _
 
 @login_required(login_url='login_raiz')
 def home(request):
@@ -77,7 +79,7 @@ def registro(request):
                 cidade=form.cleaned_data['cidade'],
             )
             auth_login(request, user)
-            messages.success(request, 'Conta criada e login realizado com sucesso!')
+            messages.success(request, _('Conta criada e login realizado com sucesso!'))
             #redireciona para home
             return redirect('home')
     else:
@@ -91,7 +93,7 @@ def login(request):
 
         if form.is_valid():
             auth_login(request, form.get_user())
-            messages.success(request, 'Login realizado com sucesso!')
+            messages.success(request, _('Login realizado com sucesso!'))
             return redirect('home')
     else:
         form = LoginForm(request)
@@ -101,8 +103,25 @@ def login(request):
 
 def logout(request):
     auth_logout(request)
-    messages.info(request, 'Você saiu da sua conta.')
+    messages.info(request, _('Você saiu da sua conta.'))
     return redirect('login_raiz')
+
+
+@require_POST
+def trocar_idioma(request):
+    idioma = request.POST.get('language')
+    next_url = request.POST.get('next') or request.META.get('HTTP_REFERER') or '/'
+
+    idiomas_disponiveis = {codigo for codigo, _ in settings.LANGUAGES}
+    if idioma not in idiomas_disponiveis:
+        return redirect(next_url)
+
+    translation.activate(idioma)
+    response = redirect(next_url)
+    if hasattr(request, 'session'):
+        request.session['django_language'] = idioma
+    response.set_cookie(settings.LANGUAGE_COOKIE_NAME, idioma)
+    return response
 
 
 def favoritos(request):  
@@ -120,12 +139,12 @@ def configuracoes(request):
         
         # verifica se o username escolhido ja existe
         if User.objects.filter(username=novo_username).exclude(id=user.id).exists():
-            messages.error(request, 'Esse username já está em uso por outra conta.')
+            messages.error(request, _('Esse username já está em uso por outra conta.'))
             return redirect('configuracoes')
             
         # verifica se email ja existe
         if User.objects.filter(email=novo_email).exclude(id=user.id).exists():
-            messages.error(request, 'Esse e-mail já está cadastrado em outra conta.')
+            messages.error(request, _('Esse e-mail já está cadastrado em outra conta.'))
             return redirect('configuracoes')
 
         # atualiza 
@@ -142,7 +161,7 @@ def configuracoes(request):
             perfil.foto_perfil = request.FILES.get('foto_perfil')
             perfil.save()
             
-        messages.success(request, 'Configurações salvas com sucesso!')
+        messages.success(request, _('Configurações salvas com sucesso!'))
         return redirect('configuracoes')
 
     # acessar a pagina
@@ -171,7 +190,7 @@ def adicionar_livro(request):
             livro.dono = request.user       # define o dono do livro
             livro.save()                    # salva no banco de dados
             
-            messages.success(request, 'Livro adicionado com sucesso!')
+            messages.success(request, _('Livro adicionado com sucesso!'))
             return redirect('perfil') 
     else:
         form = LivroForm()
@@ -211,7 +230,7 @@ def detalhe_livro(request, livro_id):
 def excluir_livro(request, livro_id):
     livro = get_object_or_404(Livro, id=livro_id, dono=request.user)
     livro.delete()
-    messages.success(request, 'Livro excluído com sucesso!')
+    messages.success(request, _('Livro excluído com sucesso!'))
     return redirect('perfil')
 
 
@@ -225,7 +244,7 @@ def editar_livro(request, livro_id):
         form = LivroForm(request.POST, request.FILES, instance=livro) 
         if form.is_valid():
             form.save()
-            messages.success(request, 'Livro atualizado com sucesso!')
+            messages.success(request, _('Livro atualizado com sucesso!'))
             return redirect('detalhe_livro', livro_id=livro.id) 
     else:
         # carregar o formulário com os dados do livro existente
@@ -244,7 +263,7 @@ def criar_interesse(request, livro_id):
     livro = get_object_or_404(Livro, id=livro_id)
 
     if livro.dono == request.user:
-        messages.error(request, 'Você não pode demonstrar interesse no seu próprio livro.')
+        messages.error(request, _('Você não pode demonstrar interesse no seu próprio livro.'))
         return redirect('detalhe_livro', livro_id=livro.id)
 
     interesse, criado = Interesse.objects.get_or_create(
@@ -254,23 +273,24 @@ def criar_interesse(request, livro_id):
     )
 
     if criado:
-        messages.success(request, 'Interesse registrado!')
+        messages.success(request, _('Interesse registrado!'))
         if livro.dono.email: 
-            assunto = f"Boas notícias! Alguém quer seu livro: {livro.titulo}"
+            assunto = _("Boas notícias! Alguém quer seu livro: %(titulo)s") % {'titulo': livro.titulo}
             
             nome_dono = livro.dono.first_name or livro.dono.username
             nome_interessado = request.user.username or request.user.first_name
             
-            mensagem = f"""
-            Olá {nome_dono.title()},
-
-            O usuário {nome_interessado} acabou de demonstrar interesse em trocar o seu livro '{livro.titulo}'.
-
-            Acesse a plataforma para aceitar ou recusar a solicitação!
-
-            Abraços,
-            Equipe do Livrô
-            """
+            mensagem = _(
+                "Olá %(nome_dono)s,\n\n"
+                "O usuário %(nome_interessado)s acabou de demonstrar interesse em trocar o seu livro '%(titulo)s'.\n\n"
+                "Acesse a plataforma para aceitar ou recusar a solicitação!\n\n"
+                "Abraços,\n"
+                "Equipe do Livrô"
+            ) % {
+                'nome_dono': nome_dono.title(),
+                'nome_interessado': nome_interessado,
+                'titulo': livro.titulo,
+            }
             
             try:
                 # dispara email
@@ -285,7 +305,7 @@ def criar_interesse(request, livro_id):
                 print(f"Erro ao tentar enviar email: {e}")
 
     else:
-        messages.info(request, 'Você já demonstrou interesse nesse livro.')
+        messages.info(request, _('Você já demonstrou interesse nesse livro.'))
 
     return redirect('detalhe_livro', livro_id=livro.id)
 
@@ -331,16 +351,20 @@ def aceitar_interesse(request, interesse_id):
 
     # email para o dono
     if dono.email:
-        assunto_dono = f"Match! Você aceitou trocar: {livro.titulo}"
-        msg_dono = f"""Olá {nome_dono.title()},
-
-Você acabou de aceitar a solicitação de {nome_interessado.title()} para o livro '{livro.titulo}'.
-
-Para combinar a troca (local, horário ou envio), entre em contato diretamente pelo e-mail:
-📧 {interessado.email}
-
-Boas trocas!
-Equipe do Livrô"""
+        assunto_dono = _("Match! Você aceitou trocar: %(titulo)s") % {'titulo': livro.titulo}
+        msg_dono = _(
+            "Olá %(nome_dono)s,\n\n"
+            "Você acabou de aceitar a solicitação de %(nome_interessado)s para o livro '%(titulo)s'.\n\n"
+            "Para combinar a troca (local, horário ou envio), entre em contato diretamente pelo e-mail:\n"
+            "📧 %(email)s\n\n"
+            "Boas trocas!\n"
+            "Equipe do Livrô"
+        ) % {
+            'nome_dono': nome_dono.title(),
+            'nome_interessado': nome_interessado.title(),
+            'titulo': livro.titulo,
+            'email': interessado.email,
+        }
 
         try:
             send_mail(assunto_dono, msg_dono, settings.DEFAULT_FROM_EMAIL, [dono.email], fail_silently=True)
@@ -349,23 +373,27 @@ Equipe do Livrô"""
 
     # email para o interessado
     if interessado.email:
-        assunto_interessado = f"Deu Match! Seu interesse em {livro.titulo} foi aceito!"
-        msg_interessado = f"""Olá {nome_interessado.title()},
-
-Ótimas notícias! O usuário {nome_dono.title()} aceitou o seu interesse pelo livro '{livro.titulo}'.
-
-Para combinar os detalhes da troca, mande um e-mail para:
-📧 {dono.email}
-
-Boas trocas!
-Equipe do Livrô"""
+        assunto_interessado = _("Deu Match! Seu interesse em %(titulo)s foi aceito!") % {'titulo': livro.titulo}
+        msg_interessado = _(
+            "Olá %(nome_interessado)s,\n\n"
+            "Ótimas notícias! O usuário %(nome_dono)s aceitou o seu interesse pelo livro '%(titulo)s'.\n\n"
+            "Para combinar os detalhes da troca, mande um e-mail para:\n"
+            "📧 %(email)s\n\n"
+            "Boas trocas!\n"
+            "Equipe do Livrô"
+        ) % {
+            'nome_interessado': nome_interessado.title(),
+            'nome_dono': nome_dono.title(),
+            'titulo': livro.titulo,
+            'email': dono.email,
+        }
 
         try:
             send_mail(assunto_interessado, msg_interessado, settings.DEFAULT_FROM_EMAIL, [interessado.email], fail_silently=True)
         except Exception as e:
             print(f"Erro ao enviar e-mail para o interessado: {e}")
 
-    messages.success(request, 'Interesse aceito! Os e-mails de contato foram enviados para os dois.')
+    messages.success(request, _('Interesse aceito! Os e-mails de contato foram enviados para os dois.'))
     return redirect(request.META.get('HTTP_REFERER', 'home'))
 
 
@@ -386,20 +414,23 @@ def recusar_interesse(request, interesse_id):
     nome_interessado = interessado.first_name or interessado.username
 
     if interessado.email:
-        assunto_interessado = f"Atualização sobre o livro: {livro.titulo}"
-        msg_interessado = f"""Olá {nome_interessado.title()},
-
-Infelizmente, o dono do livro '{livro.titulo}' não pôde aceitar a sua solicitação de troca neste momento. O livro pode já ter sido prometido a outra pessoa.
-
-Não desanime! Continue explorando a plataforma para encontrar outras opções incríveis.
-
-Abraços,
-Equipe do Livrô"""
+        assunto_interessado = _("Atualização sobre o livro: %(titulo)s") % {'titulo': livro.titulo}
+        msg_interessado = _(
+            "Olá %(nome_interessado)s,\n\n"
+            "Infelizmente, o dono do livro '%(titulo)s' não pôde aceitar a sua solicitação de troca neste momento. "
+            "O livro pode já ter sido prometido a outra pessoa.\n\n"
+            "Não desanime! Continue explorando a plataforma para encontrar outras opções incríveis.\n\n"
+            "Abraços,\n"
+            "Equipe do Livrô"
+        ) % {
+            'nome_interessado': nome_interessado.title(),
+            'titulo': livro.titulo,
+        }
 
         try:
             send_mail(assunto_interessado, msg_interessado, settings.DEFAULT_FROM_EMAIL, [interessado.email], fail_silently=True)
         except Exception as e:
             print(f"Erro ao enviar e-mail de recusa: {e}")
 
-    messages.info(request, 'O interesse foi recusado e o usuário foi notificado.')
+    messages.info(request, _('O interesse foi recusado e o usuário foi notificado.'))
     return redirect(request.META.get('HTTP_REFERER', 'home'))

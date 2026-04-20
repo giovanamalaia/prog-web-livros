@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.translation import gettext_lazy as _
 
 ESTADO_UF_CHOICES = [
     ('AC', 'Acre'),
@@ -46,38 +47,38 @@ class Perfil(models.Model):
 # model livro
 class Livro(models.Model):
     STATUS_CHOICES = [
-        ('disponivel', 'Disponível'),
-        ('reservado', 'Reservado'),
-        ('trocado', 'Trocado'),
+        ('disponivel', _('Disponível')),
+        ('reservado', _('Reservado')),
+        ('trocado', _('Trocado')),
     ]
     ESTADO_CHOICES = [
-        ('N', 'Novo'),
-        ('SN', 'Semi-novo'),
-        ('U', 'Usado'),
+        ('N', _('Novo')),
+        ('SN', _('Semi-novo')),
+        ('U', _('Usado')),
     ]
     GENERO_CHOICES = [
-        ('ficcao_geral', 'Ficção Geral'),
-        ('nao_ficcao_geral', 'Não Ficção Geral'),
-        ('fantasia', 'Fantasia'),
-        ('ficcao_cientifica', 'Ficção Científica'),
-        ('romance', 'Romance'),
-        ('misterio_suspense', 'Mistério & Suspense'),
-        ('terror', 'Terror'),
-        ('aventura', 'Aventura'),
-        ('jovem_adulto', 'Jovem Adulto'),
-        ('infantil', 'Infantil & Infanto-juvenil'),
-        ('hq_manga', 'HQs, Mangás & Graphic Novels'),
-        ('biografia', 'Biografia'),
-        ('autoajuda', 'Autoajuda'),
-        ('academico', 'Acadêmicos'),
-        ('historia_politica', 'História & Política'),
-        ('religiao', 'Religião & Espiritualidade'),
-        ('classica', 'Literatura Clássica'),
-        ('contemporanea', 'Literatura Contemporânea'),
-        ('drama', 'Drama'),
-        ('poesia', 'Poesia'),
-        ('teatro', 'Teatro (Peças)'),
-        ('outros', 'Outros'),
+        ('ficcao_geral', _('Ficção Geral')),
+        ('nao_ficcao_geral', _('Não Ficção Geral')),
+        ('fantasia', _('Fantasia')),
+        ('ficcao_cientifica', _('Ficção Científica')),
+        ('romance', _('Romance')),
+        ('misterio_suspense', _('Mistério & Suspense')),
+        ('terror', _('Terror')),
+        ('aventura', _('Aventura')),
+        ('jovem_adulto', _('Jovem Adulto')),
+        ('infantil', _('Infantil & Infanto-juvenil')),
+        ('hq_manga', _('HQs, Mangás & Graphic Novels')),
+        ('biografia', _('Biografia')),
+        ('autoajuda', _('Autoajuda')),
+        ('academico', _('Acadêmicos')),
+        ('historia_politica', _('História & Política')),
+        ('religiao', _('Religião & Espiritualidade')),
+        ('classica', _('Literatura Clássica')),
+        ('contemporanea', _('Literatura Contemporânea')),
+        ('drama', _('Drama')),
+        ('poesia', _('Poesia')),
+        ('teatro', _('Teatro (Peças)')),
+        ('outros', _('Outros')),
     ]
 
     titulo = models.CharField(max_length=200)

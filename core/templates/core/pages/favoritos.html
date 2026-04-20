@@ -1,13 +1,14 @@
 {% extends 'core/layouts/base.html' %}
-{% load static %}
+{% load static i18n %}
 
-{% block title %}Perfil{% endblock %} 
+{% block title %}{% trans "Favoritos" %}{% endblock %} 
 
 {% block content %}
 
     {% include 'core/components/top_bar.html' %}
     <div class="page-content-wrapper">
-        {% include 'core/components/book_slider.html' with section_title="MEUS INTERESSES" books_list=interesses_books %}
+        {% trans "Meus interesses" as interesses_label %}
+        {% include 'core/components/book_slider.html' with section_title=interesses_label books_list=interesses_books %}
     </div>
 
 {% endblock %}

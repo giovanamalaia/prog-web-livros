@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import home, registro, login, logout, favoritos, perfil, configuracoes, adicionar_livro, detalhe_livro, editar_livro, excluir_livro, criar_interesse, excluir_interesse, aceitar_interesse, recusar_interesse
+from .views import home, registro, login, logout, favoritos, perfil, configuracoes, adicionar_livro, detalhe_livro, editar_livro, excluir_livro, criar_interesse, excluir_interesse, aceitar_interesse, recusar_interesse, trocar_idioma
 
 urlpatterns = [
     # INICIAL (localhost:8000/)
@@ -16,6 +16,8 @@ urlpatterns = [
 
     # logout (localhost:8000/logout/)
     path('logout/', logout, name='logout'),
+
+    path('idioma/', trocar_idioma, name='trocar_idioma'),
 
     # favoritos (localhost:8000/favoritos/)
     path('favoritos/', favoritos, name='favoritos'), 

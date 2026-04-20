@@ -1,9 +1,8 @@
 {% extends 'core/layouts/base.html' %}
-{% load static %}
+{% load static i18n %}
 
 {% block title %}{{ livro.titulo }}{% endblock %}
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'core/css/books.css' %}">
 {% endblock %}
 {% block content %}
 
@@ -12,7 +11,7 @@
 <div class="page-content-wrapper">
 
     <a href="{{ back_url }}" class="btn-back" style="text-decoration: none;">
-        <i class="fa-solid fa-angle-left"></i> Back
+        <i class="fa-solid fa-angle-left"></i> {% trans "Voltar" %}
     </a>
 
     <div class="book-detail-container">
@@ -21,7 +20,7 @@
             {% if livro.capa %}
             <img src="{{ livro.capa.url }}" alt="{{ livro.titulo }}">
             {% else %}
-            <div class="placeholder-capa-large">Sem Capa</div>
+            <div class="placeholder-capa-large">{% trans "Sem capa" %}</div>
             {% endif %}
         </div>
 
@@ -34,7 +33,7 @@
 
                 <div class="book-owner-area">
                     {% if livro.dono.perfil.foto_perfil %}
-                    <img src="{{ livro.dono.perfil.foto_perfil.url }}" alt="Dono">
+                    <img src="{{ livro.dono.perfil.foto_perfil.url }}" alt="{% trans 'Dono' %}">
                     {% else %}
                     <div class="avatar-placeholder-mini" style="width: 35px; height: 35px; font-size: 14px;">
                         <i class="fa-solid fa-user"></i>
@@ -46,23 +45,29 @@
 
             <div class="book-attributes">
                 <div class="attr-col">
-                    <span class="attr-label">Author</span>
+                    <span class="attr-label">{% trans "Autor" %}</span>
                     <span class="attr-value">{{ livro.autor }}</span>
                 </div>
                 <div class="attr-col">
-                    <span class="attr-label">Genre</span>
+                    <span class="attr-label">{% trans "Gênero" %}</span>
                     <span class="attr-value">{{ livro.get_genero_display }}</span>
                 </div>
                 <div class="attr-col">
-                    <span class="attr-label">Estado</span>
+                    <span class="attr-label">{% trans "Estado" context "book_condition" %}</span>
                     <span class="attr-value">{{ livro.get_estado_display }}</span>
                 </div>
                 <div class="attr-col">
-                    <span class="attr-label">Disponível</span>
-                    <span class="attr-value">{% if livro.disponivel %}Sim{% else %}Não{% endif %}</span>
+                    <span class="attr-label">{% trans "Disponível" %}</span>
+                    <span class="attr-value">
+                        {% if livro.disponivel %}
+                            {% trans "Sim" %}
+                        {% else %}
+                            {% trans "Não" %}
+                        {% endif %}
+                    </span>
                 </div>
                 <div class="attr-col">
-                    <span class="attr-label">Status</span>
+                    <span class="attr-label">{% trans "Status" %}</span>
                     <span class="attr-value">{{ livro.get_status_display|title }}</span>
                 </div>
             </div>
@@ -73,32 +78,32 @@
             <div style="display:flex; flex-direction:column; align-items:flex-start; gap:12px;">
                 <a href="{% url 'editar_livro' livro.id %}" class="btn-blue-action"
                     style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px; margin-bottom: 0;">
-                    <i class="fa-solid fa-pen"></i> Editar Livro
+                    <i class="fa-solid fa-pen"></i> {% trans "Editar livro" %}
                 </a>
 
                 <form method="post" action="{% url 'excluir_livro' livro.id %}" style="margin:0;">
                     {% csrf_token %}
                     <button type="submit" class="btn-danger-action"
                         style="display:inline-flex; align-items:center; gap:8px;">
-                        <i class="fa-solid fa-trash"></i> Excluir Livro
+                        <i class="fa-solid fa-trash"></i> {% trans "Excluir livro" %}
                     </button>
                 </form>
             </div>
             {% else %}
             {% if meu_interesse %}
-            Status: {{ meu_interesse.get_status_display }}
+            {% trans "Status" %}: {{ meu_interesse.get_status_display }}
             <form method="post" action="{% url 'excluir_interesse' livro.id %}" style="margin:0;">
                 {% csrf_token %}
                 <button type="submit" class="btn-danger-action"
                     style="display:inline-flex; align-items:center; gap:8px;">
-                    <i class="fa-solid fa-trash"></i> Excluir interesse
+                    <i class="fa-solid fa-trash"></i> {% trans "Excluir interesse" %}
                 </button>
             </form>
             {% else %}
             <form method="post" action="{% url 'criar_interesse' livro.id %}" style="margin:0;">
                 {% csrf_token %}
                 <button type="submit" class="btn-blue-action">
-                    <i class="fa-solid fa-book-open"></i> Tenho Interesse
+                    <i class="fa-solid fa-book-open"></i> {% trans "Tenho interesse" %}
                 </button>
             </form>
             {% endif %}

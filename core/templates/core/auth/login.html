@@ -1,7 +1,7 @@
 {% extends 'core/layouts/auth_base.html' %}
-{% load static %}
+{% load static i18n %}
 
-{% block title %}Login{% endblock %}
+{% block title %}{% trans "Login" %}{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'core/css/auth/auth.css' %}">
@@ -20,13 +20,24 @@
 
     <div class="auth-form-side">
         <div class="top-actions">
-            <button class="lang-toggle">PT 🇧🇷</button>
+            {% get_current_language as LANGUAGE_CODE %}
+            <form action="{% url 'trocar_idioma' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                {% if LANGUAGE_CODE == 'pt-br' %}
+                    <input type="hidden" name="language" value="en">
+                    <button class="lang-toggle" type="submit">PT 🇧🇷</button>
+                {% else %}
+                    <input type="hidden" name="language" value="pt-br">
+                    <button class="lang-toggle" type="submit">EN 🇬🇧</button>
+                {% endif %}
+            </form>
         </div>
 
         <div class="form-container">
             <div class="form-header">
-                <h2>Entrar</h2>
-                <p>Bem-vindo de volta! Digite seus dados para acessar.</p>
+                <h2>{% trans "Entrar" %}</h2>
+                <p>{% trans "Bem-vindo de volta! Digite seus dados para acessar." %}</p>
             </div>
 
             <form method="post" class="custom-form">
@@ -34,10 +45,10 @@
 
                 {{ form.as_p }}
 
-                <button type="submit" class="btn-submit">Entrar</button>
+                <button type="submit" class="btn-submit">{% trans "Entrar" %}</button>
             </form>
 
-            <p class="login-link">Não tem conta? <a href="{% url 'registro' %}">Cadastre-se</a></p>
+            <p class="login-link">{% trans "Não tem conta?" %} <a href="{% url 'registro' %}">{% trans "Cadastre-se" %}</a></p>
         </div>
     </div>
 
