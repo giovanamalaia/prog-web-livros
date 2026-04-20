@@ -61,11 +61,21 @@ def home(request):
 
 def registro(request):
     if request.method == 'POST':
+        estado_selecionado = request.POST.get('estado') or None
         # dados que o usuário digitou no html
-        form = RegistroForm(request.POST) 
+        form = RegistroForm(request.POST, estado_selecionado=estado_selecionado) 
+        action = request.POST.get('action', 'submit')
+
+        if action == 'refresh_cities':
+            return render(request, 'core/auth/cadastro.html', {'form': form})
         
         if form.is_valid():
             user = form.save()
+            Perfil.objects.create(
+                user=user,
+                estado=form.cleaned_data['estado'],
+                cidade=form.cleaned_data['cidade'],
+            )
             auth_login(request, user)
             messages.success(request, 'Conta criada e login realizado com sucesso!')
             #redireciona para home

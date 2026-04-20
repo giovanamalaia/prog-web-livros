@@ -1,10 +1,41 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+ESTADO_UF_CHOICES = [
+    ('AC', 'Acre'),
+    ('AL', 'Alagoas'),
+    ('AP', 'Amapá'),
+    ('AM', 'Amazonas'),
+    ('BA', 'Bahia'),
+    ('CE', 'Ceará'),
+    ('DF', 'Distrito Federal'),
+    ('ES', 'Espírito Santo'),
+    ('GO', 'Goiás'),
+    ('MA', 'Maranhão'),
+    ('MT', 'Mato Grosso'),
+    ('MS', 'Mato Grosso do Sul'),
+    ('MG', 'Minas Gerais'),
+    ('PA', 'Pará'),
+    ('PB', 'Paraíba'),
+    ('PR', 'Paraná'),
+    ('PE', 'Pernambuco'),
+    ('PI', 'Piauí'),
+    ('RJ', 'Rio de Janeiro'),
+    ('RN', 'Rio Grande do Norte'),
+    ('RS', 'Rio Grande do Sul'),
+    ('RO', 'Rondônia'),
+    ('RR', 'Roraima'),
+    ('SC', 'Santa Catarina'),
+    ('SP', 'São Paulo'),
+    ('SE', 'Sergipe'),
+    ('TO', 'Tocantins'),
+]
+
 # model perfil 
 class Perfil(models.Model): 
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='perfil') 
     
+    estado = models.CharField(max_length=2, choices=ESTADO_UF_CHOICES, blank=True, null=True)
     cidade = models.CharField(max_length=100, blank=True, null=True) 
     foto_perfil = models.ImageField(upload_to='fotos_perfil/', blank=True, null=True)
 
@@ -80,4 +111,3 @@ class Interesse(models.Model):
     def __str__(self):
         return f"{self.usuario.username} tem interesse em {self.livro.titulo}"
     
-

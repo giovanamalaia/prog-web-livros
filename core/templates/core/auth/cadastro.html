@@ -28,11 +28,13 @@
                 <h2>Cadastro</h2>
                 <p>Vamos lá, crie uma conta</p>
             </div>
+            <p class="form-hint">Selecione o estado e clique em "Carregar cidades" para habilitar a lista.</p>
 
             <form method="post" class="custom-form">
                 {% csrf_token %} {{ form.as_p }}
 
-                <button type="submit" class="btn-submit">Cadastrar-se</button>
+                <button type="submit" name="action" value="refresh_cities" class="btn-secondary">Carregar cidades</button>
+                <button type="submit" name="action" value="submit" class="btn-submit">Cadastrar-se</button>
             </form>
 
             <p class="login-link">Já tem uma conta? <a href="/login">Entrar</a></p>
