@@ -50,21 +50,38 @@ class RegistroForm(UserCreationForm):
 
 
 class LivroForm(ModelForm):
+    def __init__(self, *args, include_status=False, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        if not include_status:
+            self.fields.pop('status', None)
+
     class Meta:
         model = Livro
-        fields = ['titulo', 'autor', 'genero', 'estado', 'capa'] 
+        fields = ['titulo', 'autor', 'genero', 'estado', 'status', 'capa']
         labels = {
             'titulo': _('Título'),
             'autor': _('Autor'),
             'genero': _('Gênero'), 
             'estado': p_('book_condition', 'Estado'),
+            'status': _('Status'),
             'capa': _('Capa'),
         }
         widgets = {
             'capa': forms.FileInput(attrs={'accept': 'image/*'}),
         }
 
-    #dono vem do usuário logado e status começa como disponível inicialmente, então não precisa do formulário para isso
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+
+        # Se o status foi editado, mantemos o boolean "disponivel" coerente.
+        if 'status' in self.cleaned_data:
+            instance.disponivel = self.cleaned_data['status'] == 'disponivel'
+
+        if commit:
+            instance.save()
+            self.save_m2m()
+        return instance
 
 class LoginForm(AuthenticationForm):
     username = forms.CharField(label=_('Nome de usuário'))

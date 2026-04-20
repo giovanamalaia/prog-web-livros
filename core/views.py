@@ -183,7 +183,7 @@ def perfil(request):
 @login_required(login_url='login_raiz')
 def adicionar_livro(request):
     if request.method == 'POST':
-        form = LivroForm(request.POST, request.FILES) 
+        form = LivroForm(request.POST, request.FILES, include_status=False)
         
         if form.is_valid():
             livro = form.save(commit=False) # salva "em pausa"
@@ -193,7 +193,7 @@ def adicionar_livro(request):
             messages.success(request, _('Livro adicionado com sucesso!'))
             return redirect('perfil') 
     else:
-        form = LivroForm()
+        form = LivroForm(include_status=False)
 
     context = {
         'form': form,
@@ -243,14 +243,14 @@ def editar_livro(request, livro_id):
 
     if request.method == 'POST':
         # atualizar o existente
-        form = LivroForm(request.POST, request.FILES, instance=livro) 
+        form = LivroForm(request.POST, request.FILES, instance=livro, include_status=True)
         if form.is_valid():
             form.save()
             messages.success(request, _('Livro atualizado com sucesso!'))
             return redirect('detalhe_livro', livro_id=livro.id) 
     else:
         # carregar o formulário com os dados do livro existente
-        form = LivroForm(instance=livro)
+        form = LivroForm(instance=livro, include_status=True)
 
     context = {
         'form': form,

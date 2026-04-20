@@ -77,6 +77,15 @@ msgstr "My interests"
 msgid "Meus livros"
 msgstr "My books"
 
+msgid "Pendente"
+msgstr "Pending"
+
+msgid "Aceito"
+msgstr "Accepted"
+
+msgid "Rejeitado"
+msgstr "Rejected"
+
 msgid "Voltar"
 msgstr "Back"
 

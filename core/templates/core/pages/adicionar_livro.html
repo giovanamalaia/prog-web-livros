@@ -20,15 +20,18 @@
     <div class="add-book-wrapper">
         <div class="add-book-form-side">
 
-            <form class="app-custom-form" method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                <p><label>{% trans "Título" %}</label> {{ form.titulo }}</p>
-                <p><label>{% trans "Autor" %}</label> {{ form.autor }}</p>
-                <p><label>{% trans "Gênero" %}</label> {{ form.genero }}</p>
+	            <form class="app-custom-form" method="post" enctype="multipart/form-data">
+	                {% csrf_token %}
+	                <p><label>{% trans "Título" %}</label> {{ form.titulo }}</p>
+	                <p><label>{% trans "Autor" %}</label> {{ form.autor }}</p>
+	                <p><label>{% trans "Gênero" %}</label> {{ form.genero }}</p>
 
-                <div class="form-row">
-                    <p class="half-width"><label>{% trans "Estado" context "book_condition" %}</label> {{ form.estado }}</p>
-                </div>
+	                <div class="form-row">
+	                    <p class="half-width"><label>{% trans "Estado" context "book_condition" %}</label> {{ form.estado }}</p>
+	                    {% if editando %}
+	                        <p class="half-width"><label>{% trans "Status" %}</label> {{ form.status }}</p>
+	                    {% endif %}
+	                </div>
 
                 <div class="cover-upload-field">
                     <label for="{{ form.capa.id_for_label }}">{% trans "Capa" %}</label>
