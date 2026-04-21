@@ -32,7 +32,7 @@ ESTADO_UF_CHOICES = [
     ('TO', 'Tocantins'),
 ]
 
-# model perfil 
+# model de perfil 
 class Perfil(models.Model): 
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='perfil') 
     
@@ -44,7 +44,7 @@ class Perfil(models.Model):
         return f"Perfil de {self.user.username}"
     
 
-# model livro
+# model de livro
 class Livro(models.Model):
     STATUS_CHOICES = [
         ('disponivel', _('Disponível')),
@@ -96,7 +96,7 @@ class Livro(models.Model):
     def __str__(self):
         return f"{self.titulo} por {self.autor}"
 
-# model interesse
+# model de interesse
 class Interesse(models.Model):
     STATUS_CHOICES = [
         ('pendente', _('Pendente')),

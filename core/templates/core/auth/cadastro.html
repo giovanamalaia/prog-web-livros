@@ -11,6 +11,7 @@
 {% block content %}
 <div class="auth-page-wrapper">
 
+     {# logo e nome do site #}
     <div class="auth-visual-side">
         <div class="logo-container">
             <i class="fa-solid fa-book"></i>
@@ -18,9 +19,11 @@
         </div>
     </div>
 
+    {# formulário (cadastro + ações no topo) #}
     <div class="auth-form-side">
         <div class="top-actions">
             {% get_current_language as LANGUAGE_CODE %}
+            {# Form para trocar o idioma #}
             <form action="{% url 'trocar_idioma' %}" method="post">
                 {% csrf_token %}
                 <input type="hidden" name="next" value="{{ request.get_full_path }}">
@@ -34,6 +37,7 @@
             </form>
         </div>
 
+        {# Container do formulário de cadastro #}
         <div class="form-container">
             <div class="form-header">
                 <h2>{% trans "Cadastro" %}</h2>
@@ -48,6 +52,7 @@
                 <button type="submit" name="action" value="submit" class="btn-submit">{% trans "Cadastrar-se" %}</button>
             </form>
 
+            {# Link para quem já tem conta ir para login #}
             <p class="login-link">{% trans "Já tem uma conta?" %} <a href="/login">{% trans "Entrar" %}</a></p>
         </div>
     </div>

@@ -17,6 +17,7 @@ urlpatterns = [
     # logout (localhost:8000/logout/)
     path('logout/', logout, name='logout'),
 
+    # trocar idioma (localhost:8000/idioma/)
     path('idioma/', trocar_idioma, name='trocar_idioma'),
 
     # favoritos (localhost:8000/favoritos/)
@@ -29,21 +30,28 @@ urlpatterns = [
     # configurações (localhost:8000/configuracoes/)
     path('configuracoes/', configuracoes, name='configuracoes'), 
 
+    # adicionar livro (localhost:8000/adicionar-livro/)
     path('adicionar-livro/', adicionar_livro, name='adicionar_livro'),
 
     # Detalhe do Livro
     path('livro/<int:livro_id>/', detalhe_livro, name='detalhe_livro'),
 
+    # editar livro (localhost:8000/editar-livro/<int:livro_id>/)
     path('editar-livro/<int:livro_id>/', editar_livro, name='editar_livro'),
 
+    # excluir livro (localhost:8000/excluir-livro/<int:livro_id>/)
     path('excluir-livro/<int:livro_id>/', excluir_livro, name='excluir_livro'),
 
+    # criar interesse (localhost:8000/livro/<int:livro_id>/interesse/)
     path('livro/<int:livro_id>/interesse/', criar_interesse, name='criar_interesse'),
 
+    # excluir interesse (localhost:8000/livro/<int:livro_id>/interesse/excluir/)
     path('livro/<int:livro_id>/interesse/excluir/', excluir_interesse, name='excluir_interesse'),
 
+    # aceitar interesse (localhost:8000/interesse/<int:interesse_id>/aceitar/)
     path('interesse/<int:interesse_id>/aceitar/', aceitar_interesse, name='aceitar_interesse'),
 
+    # recusar interesse (localhost:8000/interesse/<int:interesse_id>/recusar/)
     path('interesse/<int:interesse_id>/recusar/', recusar_interesse, name='recusar_interesse'),
 
 ]

@@ -3,8 +3,8 @@
 Projeto Web em **Python + Django**, **HTML** e **CSS** para troca de livros entre usuários.
 
 ## Integrantes
-- **Giovana Malaia Pinheiro - 2312080 **
-- **Luana Pinho Bueno Pena - 2312082 **
+- Giovana Malaia Pinheiro - 2312080
+- Luana Pinho Bueno Pena - 2312082 
 
 ## Links da entrega
 - **Site publicado:** [link site]
@@ -106,4 +106,5 @@ EMAIL_PASSWORD=sua_senha_de_app
 - Recuperação de senha (com e‑mail configurado)
 
 ## O que foi testado e não funcionou
-- Nada a relatar
+- Quando você clica em "Tenho interesse", clica em "Aceitar solicitação" ou qualquer coisa que faz o sistema mandar um email, pode demorar um pouco para carregar.
+- Como usamos só django, python, html e css, algumas informações (como status do interesse após ser aceito pelo dono), pode precisar que você recarregue a tela para atualizar a view em tempo real.

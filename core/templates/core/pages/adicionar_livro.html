@@ -22,13 +22,16 @@
 
 	            <form class="app-custom-form" method="post" enctype="multipart/form-data">
 	                {% csrf_token %}
+                    {# Se estivermos editando um livro, incluímos um campo oculto para redirecionar o usuário de volta para a página anterior após a edição. #}
 	                {% if editando %}
 	                    <input type="hidden" name="next" value="{{ request.GET.next|default:'' }}">
 	                {% endif %}
+                    {# Campos para título, autor e gênero do livro #}
 	                <p><label>{% trans "Título" %}</label> {{ form.titulo }}</p>
 	                <p><label>{% trans "Autor" %}</label> {{ form.autor }}</p>
 	                <p><label>{% trans "Gênero" %}</label> {{ form.genero }}</p>
 
+                    {# Campo para selecionar a condição do livro #}
 	                <div class="form-row">
 	                    <p class="half-width"><label>{% trans "Estado" context "book_condition" %}</label> {{ form.estado }}</p>
 	                    {% if editando %}
@@ -36,6 +39,7 @@
 	                    {% endif %}
 	                </div>
 
+                {# Campo para upload da capa do livro#}
                 <div class="cover-upload-field">
                     <label for="{{ form.capa.id_for_label }}">{% trans "Capa" %}</label>
                     {{ form.capa }}
@@ -48,6 +52,7 @@
             </form>
         </div>
 
+        {# Mostrando a capa #}
         <div class="add-book-photo-side">
             <div class="book-cover-preview" id="imagePreview">
                 {% if form.instance.capa %}
