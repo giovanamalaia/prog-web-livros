@@ -3,8 +3,8 @@
 Projeto Web em **Python + Django**, **HTML** e **CSS** para troca de livros entre usuários.
 
 ## Integrantes
-- **Giovana Malaia Pinheiro - 2312080 **
-- **Luana Pinho Bueno Pena - 2312082 **
+- Giovana Malaia Pinheiro - 2312080
+- Luana Pinho Bueno Pena - 2312082 
 
 ## Links da entrega
 - **Site publicado:** [link site]
