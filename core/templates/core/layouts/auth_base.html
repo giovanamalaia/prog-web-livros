@@ -7,10 +7,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" referrerpolicy="no-referrer">
     <title>{% block title %}{% trans "Livrô - Autenticação" %}{% endblock %}</title>
+
+    <style>
+        /* Toasts (mensagens Django) também nas telas de autenticação */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+        }
+
+        .toast-message {
+            padding: 16px 24px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            font-size: 14px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            animation: slideInAndOut 5s forwards;
+        }
+
+        .toast-message.success { background-color: #10b981; }
+        .toast-message.error { background-color: #ef4444; }
+        .toast-message.info { background-color: #3b82f6; }
+
+        @keyframes slideInAndOut {
+            0% { transform: translateX(100%); opacity: 0; }
+            10% { transform: translateX(0); opacity: 1; }
+            80% { transform: translateX(0); opacity: 1; }
+            100% { transform: translateX(100%); opacity: 0; visibility: hidden; }
+        }
+    </style>
     
     {% block extra_css %}{% endblock %}
 </head>
 <body>
+    {% if messages %}
+        <div class="toast-container">
+            {% for message in messages %}
+                <div class="toast-message {{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
     {% block content %}
     {% endblock %}
 </body>
