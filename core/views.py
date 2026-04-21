@@ -26,6 +26,15 @@ def home(request):
     if request.user.is_authenticated:
         livros_disponiveis = livros_disponiveis.exclude(dono=request.user)
 
+    # "Perto de você": mesmo estado do usuário (quando existir)
+    livros_perto = Livro.objects.none()
+    estado_usuario = getattr(getattr(request.user, 'perfil', None), 'estado', None)
+    if estado_usuario:
+        livros_perto = (
+            livros_disponiveis.filter(dono__perfil__estado=estado_usuario)
+            .order_by('-data_adicao')[:20]
+        )
+
     # pesquisa
     q = request.GET.get('q', '').strip()
     if q:
@@ -56,6 +65,7 @@ def home(request):
 
     context = {
         'latest_books': latest_books,
+        'livros_perto': livros_perto,
         'livros_por_genero': livros_por_genero, 
         'active_page': 'home',
     }

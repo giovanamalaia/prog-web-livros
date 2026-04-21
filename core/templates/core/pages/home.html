@@ -8,6 +8,11 @@
     {% include 'core/components/top_bar.html' %}
 
     <div class="page-content-wrapper">
+        {% if livros_perto %}
+            {% trans "Perto de você" as near_label %}
+            {% include 'core/components/book_slider.html' with section_title=near_label books_list=livros_perto %}
+        {% endif %}
+
         {% trans "Últimos" as latest_label %}
         {% include 'core/components/book_slider.html' with section_title=latest_label books_list=latest_books %}
 

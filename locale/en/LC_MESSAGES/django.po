@@ -74,6 +74,9 @@ msgstr "Latest"
 msgid "Meus interesses"
 msgstr "My interests"
 
+msgid "Perto de você"
+msgstr "Close to you"
+
 msgid "Meus livros"
 msgstr "My books"
 
