@@ -29,7 +29,23 @@ def home(request):
     if request.user.is_authenticated:
         livros_disponiveis = livros_disponiveis.exclude(dono=request.user)
 
+    # Pesquisa (na lista de livros disponíveis)
+    q = request.GET.get('q', '').strip()
+    if q:
+        termos = [termo for termo in q.split() if termo]
+        for termo in termos:
+            livros_disponiveis = livros_disponiveis.filter(
+                Q(titulo__istartswith=termo)
+                | Q(titulo__icontains=f" {termo}")
+                | Q(autor__istartswith=termo)
+                | Q(autor__icontains=f" {termo}")
+            )
+        latest_books = livros_disponiveis.order_by('-data_adicao')  # sem limitar quando pesquisa
+    else:
+        latest_books = livros_disponiveis.order_by('-data_adicao')[:20]
+
     # "Perto de você": Prioriza a mesma cidade, completa com o mesmo estado
+    # (usa livros_disponiveis já filtrado pela pesquisa, quando houver)
     livros_perto = Livro.objects.none()
     perfil_usuario = getattr(request.user, 'perfil', None)
     
@@ -57,21 +73,6 @@ def home(request):
                 livros_disponiveis.filter(dono__perfil__estado=estado_usuario)
                 .order_by('-data_adicao')[:20]
             )
-
-    # Pesquisa (na lista de livros disponíveis)
-    q = request.GET.get('q', '').strip()
-    if q:
-        termos = [termo for termo in q.split() if termo]
-        for termo in termos:
-            livros_disponiveis = livros_disponiveis.filter(
-                Q(titulo__istartswith=termo)
-                | Q(titulo__icontains=f" {termo}")
-                | Q(autor__istartswith=termo)
-                | Q(autor__icontains=f" {termo}")
-            )
-        latest_books = livros_disponiveis.order_by('-data_adicao')  # sem limitar quando pesquisa
-    else:
-        latest_books = livros_disponiveis.order_by('-data_adicao')[:20]
 
     # agrupa os livros por gênero, mas só exibe gêneros que tenham livros disponíveis
     livros_por_genero = []
