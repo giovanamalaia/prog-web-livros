@@ -11,11 +11,11 @@
 
 .toast-message {
     padding: 16px 24px;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     color: white;
     font-weight: 500;
     font-size: 14px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: var(--shadow-sm);
     animation: slideInAndOut 5s forwards;
 }
 
