@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import home, registro, login, logout, favoritos, perfil, configuracoes, adicionar_livro, detalhe_livro, editar_livro, excluir_livro, criar_interesse, excluir_interesse, aceitar_interesse, recusar_interesse, trocar_idioma
+from .views import home, registro, login, logout, favoritos, perfil, perfil_publico, configuracoes, adicionar_livro, detalhe_livro, editar_livro, excluir_livro, criar_interesse, excluir_interesse, aceitar_interesse, recusar_interesse, trocar_idioma
 
 urlpatterns = [
     # INICIAL (localhost:8000/)
@@ -23,7 +23,8 @@ urlpatterns = [
     path('favoritos/', favoritos, name='favoritos'), 
 
     # perfil (localhost:8000/perfil/)
-    path('perfil/', perfil, name='perfil'), 
+    path('perfil/', perfil, name='perfil'),
+    path('perfil/<int:user_id>/', perfil_publico, name='perfil_publico'),
 
     # configurações (localhost:8000/configuracoes/)
     path('configuracoes/', configuracoes, name='configuracoes'), 

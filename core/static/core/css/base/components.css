@@ -49,6 +49,20 @@
     color: var(--color-primary);
 }
 
+.notif-avatar-link {
+    display: inline-flex;
+    text-decoration: none;
+}
+
+.notif-avatar-link .notif-avatar {
+    transition: box-shadow 0.2s, transform 0.1s;
+}
+
+.notif-avatar-link:hover .notif-avatar {
+    box-shadow: var(--shadow-sm);
+    transform: translateY(-1px);
+}
+
 .notif-img {
     width: 100%;
     height: 100%;

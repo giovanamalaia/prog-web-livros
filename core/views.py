@@ -252,6 +252,23 @@ def perfil(request):
 
 
 @login_required(login_url='login_raiz')
+def perfil_publico(request, user_id):
+    if request.user.id == user_id:
+        return redirect('perfil')
+
+    perfil_user = get_object_or_404(User, id=user_id)
+    Perfil.objects.get_or_create(user=perfil_user)
+    livros_dono = Livro.objects.filter(dono=perfil_user).order_by('-data_adicao')
+
+    context = {
+        'active_page': 'perfil',
+        'perfil_user': perfil_user,
+        'livros_dono': livros_dono,
+    }
+    return render(request, 'core/pages/perfil_publico.html', context)
+
+
+@login_required(login_url='login_raiz')
 def adicionar_livro(request):
     if request.method == 'POST':
         form = LivroForm(request.POST, request.FILES, include_status=False)

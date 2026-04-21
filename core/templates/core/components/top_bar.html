@@ -51,13 +51,15 @@
                 <div class="notif-items-container">
                     {% for interesse in notificacoes_interesses %}
                         <div class="notif-item">
-                            <div class="notif-avatar">
-                                {% if interesse.usuario.perfil.foto_perfil %}
-                                    <img src="{{ interesse.usuario.perfil.foto_perfil.url }}" alt="{{ interesse.usuario.username }}" class="notif-img">
-                                {% else %}
-                                    {{ interesse.usuario.username|slice:":2"|upper }}
-                                {% endif %}
-                            </div>
+                            <a href="{% url 'perfil_publico' interesse.usuario.id %}" class="notif-avatar-link">
+                                <div class="notif-avatar">
+                                    {% if interesse.usuario.perfil.foto_perfil %}
+                                        <img src="{{ interesse.usuario.perfil.foto_perfil.url }}" alt="{{ interesse.usuario.username }}" class="notif-img">
+                                    {% else %}
+                                        {{ interesse.usuario.username|slice:":2"|upper }}
+                                    {% endif %}
+                                </div>
+                            </a>
 
                             <div class="notif-body">
                                 <div class="notif-text">

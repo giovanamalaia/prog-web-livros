@@ -271,6 +271,17 @@
     border: 1px solid var(--color-border);
 }
 
+.book-owner-link {
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.1s;
+}
+
+.book-owner-link:hover {
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-sm);
+}
+
 .book-owner-area img {
     width: 35px;
     height: 35px;
