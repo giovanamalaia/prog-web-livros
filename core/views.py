@@ -251,6 +251,13 @@ def editar_livro(request, livro_id):
     # busca o livro, mas exige que o dono seja o usuário logado
     livro = get_object_or_404(Livro, id=livro_id, dono=request.user)
 
+    # Preserva o "Voltar" até a tela anterior (ex.: Meus livros/perfil) após salvar.
+    next_url = request.GET.get('next') or request.POST.get('next') or ''
+    if next_url:
+        parsed = urlparse(next_url)
+        if (parsed.scheme and parsed.scheme not in ('http', 'https')) or (parsed.netloc and parsed.netloc != request.get_host()):
+            next_url = ''
+
     if request.method == 'POST':
         status_anterior = livro.status
         # atualizar o existente
@@ -263,7 +270,10 @@ def editar_livro(request, livro_id):
                 Interesse.objects.filter(livro=livro, status='pendente').update(status='recusado')
 
             messages.success(request, _('Livro atualizado com sucesso!'))
-            return redirect('detalhe_livro', livro_id=livro.id) 
+            url = reverse('detalhe_livro', args=[livro.id])
+            if next_url:
+                url = f"{url}?{urlencode({'next': next_url})}"
+            return redirect(url)
     else:
         # carregar o formulário com os dados do livro existente
         form = LivroForm(instance=livro, include_status=True)

@@ -76,10 +76,10 @@
             <div class="book-actions"></div>
             {% if request.user == livro.dono %}
             <div style="display:flex; flex-direction:column; align-items:flex-start; gap:12px;">
-                <a href="{% url 'editar_livro' livro.id %}" class="btn-blue-action"
-                    style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px; margin-bottom: 0;">
-                    <i class="fa-solid fa-pen"></i> {% trans "Editar livro" %}
-                </a>
+	                <a href="{% url 'editar_livro' livro.id %}?next={{ back_url|urlencode }}" class="btn-blue-action"
+	                    style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px; margin-bottom: 0;">
+	                    <i class="fa-solid fa-pen"></i> {% trans "Editar livro" %}
+	                </a>
 
                 <form method="post" action="{% url 'excluir_livro' livro.id %}" style="margin:0;">
                     {% csrf_token %}
