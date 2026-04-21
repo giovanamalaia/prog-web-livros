@@ -12,11 +12,13 @@ DATA_PATH = Path(__file__).resolve().parent / "data" / "ibge_cidades.json"
 with DATA_PATH.open(encoding="utf-8") as data_file:
     CIDADES_POR_UF = json.load(data_file)
 
+# Arquivo onde estão todos os formulários para ser preenchidos pelo usuário, como o de registro, login, cadastro de livros e edição de perfil.
 
 def choices_cidades(uf):
     cidades = CIDADES_POR_UF.get(uf, {}).get("cidades", [])
     return [('', _('Selecione a cidade'))] + [(cidade, cidade) for cidade in cidades]
 
+# Formulário de registro de usuário, para ele se registrar ao sistema
 class RegistroForm(UserCreationForm):
     username = forms.CharField(label=_('Nome de usuário'))
     password1 = forms.CharField(widget=forms.PasswordInput, label=_('Senha'))
@@ -48,6 +50,7 @@ class RegistroForm(UserCreationForm):
             'password2',
         ]
 
+# Formulário para edição de perfil, onde o usuário pode editar suas informações pessoais, como nome, email e localização.
 class PerfilLocalizacaoForm(forms.Form):
     estado = forms.ChoiceField(
         label=p_('state', 'Estado'),
@@ -82,6 +85,7 @@ class PerfilLocalizacaoForm(forms.Form):
         return cleaned_data
 
 
+# Formulário para cadastro e edição de livros, onde o usuário pode cadastrar um livro para troca ou editar as informações de um livro já cadastrado.
 class LivroForm(ModelForm):
     def __init__(self, *args, include_status=False, **kwargs):
         super().__init__(*args, **kwargs)
@@ -116,6 +120,7 @@ class LivroForm(ModelForm):
             self.save_m2m()
         return instance
 
+# Formulário de login, para o usuário fazer login no sistema
 class LoginForm(AuthenticationForm):
     username = forms.CharField(label=_('Nome de usuário'))
     password = forms.CharField(widget=forms.PasswordInput, label=_('Senha'))

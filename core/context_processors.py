@@ -1,5 +1,7 @@
 from .models import Interesse
 
+# Parte para trazer as notificações de interesses pendentes para o dono do livro
+
 def notificacoes(request):
     if not request.user.is_authenticated:
         return {'notificacoes_interesses': []}

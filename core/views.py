@@ -20,8 +20,10 @@ from django.contrib.auth.models import User
 from django.utils import translation
 from django.utils.translation import gettext as _
 
+
 @login_required(login_url='login_raiz')
 def home(request):
+    # Exibe os livros disponíveis, priorizando os mais próximos 
     livros_disponiveis = Livro.objects.filter(disponivel=True)
 
     if request.user.is_authenticated:
@@ -56,7 +58,7 @@ def home(request):
                 .order_by('-data_adicao')[:20]
             )
 
-    # pesquisa
+    # Pesquisa (na lista de livros disponíveis)
     q = request.GET.get('q', '').strip()
     if q:
         termos = [termo for termo in q.split() if termo]
@@ -71,7 +73,7 @@ def home(request):
     else:
         latest_books = livros_disponiveis.order_by('-data_adicao')[:20]
 
-    # generos
+    # agrupa os livros por gênero, mas só exibe gêneros que tenham livros disponíveis
     livros_por_genero = []
     
     for slug_genero, nome_bonito in Livro.GENERO_CHOICES:
@@ -92,6 +94,7 @@ def home(request):
     }
     return render(request, 'core/pages/home.html', context)
 
+#Parte de registro
 def registro(request):
     if request.method == 'POST':
         estado_selecionado = request.POST.get('estado') or None
@@ -102,6 +105,7 @@ def registro(request):
         if action == 'refresh_cities':
             return render(request, 'core/auth/cadastro.html', {'form': form})
         
+        # se o formulário for válido, salva o usuário e o perfil, e loga o usuário
         if form.is_valid():
             user = form.save()
             Perfil.objects.create(
@@ -118,6 +122,7 @@ def registro(request):
     
     return render(request, 'core/auth/cadastro.html', {'form': form})
 
+#Parte de login do usuário
 def login(request):
     if request.method == 'POST':
         form = LoginForm(request, data=request.POST)
@@ -132,12 +137,14 @@ def login(request):
     return render(request, 'core/auth/login.html', {'form': form})
 
 
+#Parte de logout do usuário
 def logout(request):
     auth_logout(request)
     messages.info(request, _('Você saiu da sua conta.'))
     return redirect('login_raiz')
 
 
+#Troca de idioma
 @require_POST
 def trocar_idioma(request):
     idioma = request.POST.get('language')
@@ -154,11 +161,7 @@ def trocar_idioma(request):
     response.set_cookie(settings.LANGUAGE_COOKIE_NAME, idioma)
     return response
 
-
-def favoritos(request):  
-    return render(request, 'core/pages/favoritos.html', {'active_page': 'favoritos'})  
-
-
+# Página de configurações do usuário (perfil, localização, foto)
 @login_required(login_url='login_raiz')
 def configuracoes(request):
     user = request.user
@@ -239,6 +242,7 @@ def configuracoes(request):
     })
 
 
+# Página de perfil do usuário, onde ele pode ver seus livros e edita se quiser
 @login_required(login_url='login_raiz')
 def perfil(request): 
     # filtro os livros onde o dono é o usuário que está logado atualmente
@@ -251,6 +255,7 @@ def perfil(request):
     return render(request, 'core/pages/perfil.html', context)
 
 
+# Página de perfil público, onde se vê os livros de outro usuário 
 @login_required(login_url='login_raiz')
 def perfil_publico(request, user_id):
     if request.user.id == user_id:
@@ -267,7 +272,7 @@ def perfil_publico(request, user_id):
     }
     return render(request, 'core/pages/perfil_publico.html', context)
 
-
+#Parte de adicionar livros
 @login_required(login_url='login_raiz')
 def adicionar_livro(request):
     if request.method == 'POST':
@@ -290,6 +295,7 @@ def adicionar_livro(request):
     return render(request, 'core/pages/adicionar_livro.html', context)
     
 
+# Parte de detalhes dos livros
 @login_required(login_url='login_raiz')
 def detalhe_livro(request, livro_id):
     livro = get_object_or_404(Livro, id=livro_id)
@@ -314,7 +320,7 @@ def detalhe_livro(request, livro_id):
     }
     return render(request, 'core/pages/detalhe_livro.html', context)
 
-
+#Parte de excluir livros 
 @login_required(login_url='login_raiz')
 @require_POST
 def excluir_livro(request, livro_id):
@@ -323,7 +329,7 @@ def excluir_livro(request, livro_id):
     messages.success(request, _('Livro excluído com sucesso!'))
     return redirect('perfil')
 
-
+#Parte de editar livros
 @login_required(login_url='login_raiz')
 def editar_livro(request, livro_id):
     # busca o livro, mas exige que o dono seja o usuário logado
@@ -363,6 +369,7 @@ def editar_livro(request, livro_id):
     }
     return render(request, 'core/pages/adicionar_livro.html', context)
 
+#Parte de criar interesse, excluir interesse, aceitar interesse e recusar interesse
 @login_required(login_url='login_raiz')
 @require_POST
 def criar_interesse(request, livro_id):
@@ -427,6 +434,7 @@ def criar_interesse(request, livro_id):
         url = f"{url}?{urlencode({'next': next_url})}"
     return redirect(url)
 
+#Parte de excluir interesse
 @login_required(login_url='login_raiz')
 @require_POST
 def excluir_interesse(request, livro_id):
@@ -439,7 +447,7 @@ def excluir_interesse(request, livro_id):
     Interesse.objects.filter(usuario=request.user, livro_id=livro_id).delete()
     return redirect(next_url or 'favoritos')
 
-
+#Parte de interesse
 @login_required(login_url='login_raiz')
 def favoritos(request):
     interesses = (
@@ -467,6 +475,7 @@ def favoritos(request):
         'interesses_books': interesses_books,
     })
 
+#Parte de aceitar interesse
 @login_required(login_url='login_raiz')
 @require_POST
 def aceitar_interesse(request, interesse_id):
@@ -538,7 +547,7 @@ def aceitar_interesse(request, interesse_id):
     messages.success(request, _('Interesse aceito! Os e-mails de contato foram enviados para os dois.'))
     return redirect(request.META.get('HTTP_REFERER', 'home'))
 
-
+#Parte de recusar interesse
 @login_required(login_url='login_raiz')
 @require_POST
 def recusar_interesse(request, interesse_id):

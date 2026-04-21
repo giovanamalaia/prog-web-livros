@@ -7,6 +7,7 @@
 
     {% include 'core/components/top_bar.html' %}
 
+    {# Página inicial do site, onde o usuário pode ver os livros mais recentes, os livros perto dele e os livros organizados por gênero. #}
     <div class="page-content-wrapper">
         {% if livros_perto %}
             {% trans "Perto de você" as near_label %}

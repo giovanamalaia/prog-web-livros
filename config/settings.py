@@ -126,7 +126,7 @@ LOCALE_PATHS = [
     BASE_DIR / 'locale',
 ]
 
-# Static files (CSS, JavaScript, Images)
+# Static files (CSS, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = '/static/'  # usa barra inicial para o navegador resolver corretamente em qualquer rota (ex.: /login/, /cadastro/)

@@ -6,9 +6,10 @@
 {% block content %}
 
 {% include 'core/components/top_bar.html' %}
-
+{# Página de perfil do usuário, onde ele pode ver suas informações e os livros que tem para troca. #}
 <div class="page-content-wrapper">
 
+    {# Mostrando a foto de perfil do usuário ou um placeholder caso não tenha foto #}
     <div class="user-profile-header">
         {% if user.perfil.foto_perfil %}
         <img src="{{ user.perfil.foto_perfil.url }}" alt="{% blocktrans with username=user.username %}Foto de {{ username }}{% endblocktrans %}" class="profile-large-avatar">
@@ -31,6 +32,7 @@
     </div>
 </div>
 
+{# Mostrando os livros do usuário #}
 <div class="user-books-section">
     {% trans "Meus livros" as meus_livros_label %}
     {% include 'core/components/book_slider.html' with section_title=meus_livros_label books_list=meus_livros %}
