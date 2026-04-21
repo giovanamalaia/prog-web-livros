@@ -48,6 +48,39 @@ class RegistroForm(UserCreationForm):
             'password2',
         ]
 
+class PerfilLocalizacaoForm(forms.Form):
+    estado = forms.ChoiceField(
+        label=p_('state', 'Estado'),
+        choices=[('', _('Selecione o estado'))] + list(ESTADO_UF_CHOICES),
+        required=False,
+    )
+    cidade = forms.ChoiceField(
+        label=_('Cidade'),
+        choices=[('', _('Selecione o estado primeiro'))],
+        required=False,
+    )
+
+    def __init__(self, *args, estado_selecionado=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        if estado_selecionado:
+            self.fields['cidade'].choices = choices_cidades(estado_selecionado)
+            self.fields['cidade'].widget.attrs.pop('disabled', None)
+        else:
+            self.fields['cidade'].choices = [('', _('Selecione o estado primeiro'))]
+            self.fields['cidade'].widget.attrs['disabled'] = True
+
+    def clean(self):
+        cleaned_data = super().clean()
+        estado = cleaned_data.get('estado')
+        cidade = cleaned_data.get('cidade')
+
+        if cidade and not estado:
+            self.add_error('estado', _('Selecione o estado da cidade.'))
+        if estado and not cidade:
+            self.add_error('cidade', _('Selecione a cidade.'))
+
+        return cleaned_data
+
 
 class LivroForm(ModelForm):
     def __init__(self, *args, include_status=False, **kwargs):

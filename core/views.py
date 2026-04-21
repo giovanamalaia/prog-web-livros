@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .forms import RegistroForm
 from .forms import LoginForm
+from .forms import PerfilLocalizacaoForm
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from .models import Livro, Interesse, Perfil
 from django.contrib.auth.decorators import login_required
@@ -140,42 +141,82 @@ def favoritos(request):
 
 @login_required(login_url='login_raiz')
 def configuracoes(request):
+    user = request.user
+    perfil, perfil_criado = Perfil.objects.get_or_create(user=user)
+
+    post_data = request.POST if request.method == 'POST' else None
+    estado_selecionado = (post_data.get('estado') if post_data else perfil.estado) or None
+    localizacao_form = PerfilLocalizacaoForm(
+        post_data or None,
+        estado_selecionado=estado_selecionado,
+        initial={
+            'estado': perfil.estado,
+            'cidade': perfil.cidade,
+        },
+    )
+
+    form_values = {
+        'username': post_data.get('username') if post_data else user.username,
+        'first_name': post_data.get('first_name') if post_data else user.first_name,
+        'last_name': post_data.get('last_name') if post_data else user.last_name,
+        'email': post_data.get('email') if post_data else user.email,
+    }
+
     if request.method == 'POST':
-        user = request.user
-        
-        # oq foi digitado
-        novo_username = request.POST.get('username')
-        novo_email = request.POST.get('email')
-        
+        action = request.POST.get('action', 'submit')
+        if action == 'refresh_cities':
+            return render(request, 'core/pages/configuracoes.html', {
+                'active_page': 'configuracoes',
+                'localizacao_form': localizacao_form,
+                'form_values': form_values,
+            })
+
+        if not localizacao_form.is_valid():
+            messages.error(request, _('Selecione um estado e uma cidade válidos.'))
+            return render(request, 'core/pages/configuracoes.html', {
+                'active_page': 'configuracoes',
+                'localizacao_form': localizacao_form,
+                'form_values': form_values,
+            })
+
+        novo_username = form_values['username']
+        novo_email = form_values['email']
+
         # verifica se o username escolhido ja existe
         if User.objects.filter(username=novo_username).exclude(id=user.id).exists():
             messages.error(request, _('Esse username já está em uso por outra conta.'))
             return redirect('configuracoes')
-            
+
         # verifica se email ja existe
         if User.objects.filter(email=novo_email).exclude(id=user.id).exists():
             messages.error(request, _('Esse e-mail já está cadastrado em outra conta.'))
             return redirect('configuracoes')
 
-        # atualiza 
+        # atualiza
         user.username = novo_username
-        user.first_name = request.POST.get('first_name')
-        user.last_name = request.POST.get('last_name')
+        user.first_name = form_values['first_name']
+        user.last_name = form_values['last_name']
         user.email = novo_email
         user.save()
 
-        perfil, criado = Perfil.objects.get_or_create(user=user)
-        
+        perfil.estado = localizacao_form.cleaned_data.get('estado') or None
+        perfil.cidade = localizacao_form.cleaned_data.get('cidade') or None
+
         # input da foto
         if 'foto_perfil' in request.FILES:
             perfil.foto_perfil = request.FILES.get('foto_perfil')
-            perfil.save()
-            
+
+        perfil.save()
+
         messages.success(request, _('Configurações salvas com sucesso!'))
         return redirect('configuracoes')
 
     # acessar a pagina
-    return render(request, 'core/pages/configuracoes.html', {'active_page': 'configuracoes'})
+    return render(request, 'core/pages/configuracoes.html', {
+        'active_page': 'configuracoes',
+        'localizacao_form': localizacao_form,
+        'form_values': form_values,
+    })
 
 
 @login_required(login_url='login_raiz')

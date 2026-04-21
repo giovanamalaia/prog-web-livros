@@ -13,23 +13,36 @@
     <div class="profile-form-side app-custom-form">
         <p>
             <label>{% trans "Nome de usuário" %}</label>
-            <input type="text" name="username" value="{{ user.username }}" required>
+            <input type="text" name="username" value="{{ form_values.username }}" required>
         </p>
         <p>
             <label>{% trans "Nome" %}</label>
-            <input type="text" name="first_name" value="{{ user.first_name }}">
+            <input type="text" name="first_name" value="{{ form_values.first_name }}">
         </p>
         <p>
             <label>{% trans "Sobrenome" %}</label>
-            <input type="text" name="last_name" value="{{ user.last_name }}">
+            <input type="text" name="last_name" value="{{ form_values.last_name }}">
         </p>
         <p>
             <label>{% trans "Email" %}</label>
-            <input type="email" name="email" value="{{ user.email }}" required>
+            <input type="email" name="email" value="{{ form_values.email }}" required>
         </p>
 
+        <p class="form-hint">{% trans "Selecione o estado e clique em \"Carregar cidades\" para habilitar a lista." %}</p>
+        <div class="form-row">
+            <p class="half-width">
+                <label>{% trans "Estado" context "state" %}</label>
+                {{ localizacao_form.estado }}
+            </p>
+            <p class="half-width">
+                <label>{% trans "Cidade" %}</label>
+                {{ localizacao_form.cidade }}
+            </p>
+        </div>
+
         <div style="display: flex; gap: 12px; margin-top: 24px;">
-            <button type="submit" class="btn-blue">{% trans "Salvar alterações" %}</button>
+            <button type="submit" name="action" value="refresh_cities" class="btn-secondary">{% trans "Carregar cidades" %}</button>
+            <button type="submit" name="action" value="submit" class="btn-blue">{% trans "Salvar alterações" %}</button>
 
             <a href="#" class="btn-blue-action"
                 style="text-decoration: none; display: flex; align-items: center; margin: 0;">
