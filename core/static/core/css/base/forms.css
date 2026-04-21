@@ -1,0 +1,36 @@
+.app-custom-form p {
+    position: relative;
+    margin-bottom: 25px;
+}
+
+.app-custom-form p input,
+.app-custom-form p select {
+    width: 100%;
+    padding: 15px 20px;
+    border: 1px solid #111;
+    border-radius: 12px;
+    background: transparent;
+    font-size: 15px;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.app-custom-form p label {
+    position: absolute;
+    top: -10px;
+    left: 20px;
+    background-color: #F1EEE3;
+    padding: 0 5px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #111;
+}
+
+.form-row {
+    display: flex;
+    gap: 20px;
+}
+
+.half-width {
+    flex: 1;
+}
