@@ -242,10 +242,16 @@ def editar_livro(request, livro_id):
     livro = get_object_or_404(Livro, id=livro_id, dono=request.user)
 
     if request.method == 'POST':
+        status_anterior = livro.status
         # atualizar o existente
         form = LivroForm(request.POST, request.FILES, instance=livro, include_status=True)
         if form.is_valid():
-            form.save()
+            livro = form.save()
+
+            # Se o dono marcou como "trocado", rejeita pendências desse livro.
+            if status_anterior != 'trocado' and livro.status == 'trocado':
+                Interesse.objects.filter(livro=livro, status='pendente').update(status='recusado')
+
             messages.success(request, _('Livro atualizado com sucesso!'))
             return redirect('detalhe_livro', livro_id=livro.id) 
     else:

@@ -99,9 +99,9 @@ class Livro(models.Model):
 # model interesse
 class Interesse(models.Model):
     STATUS_CHOICES = [
-        ('pendente', 'Pendente'),
-        ('aceito', 'Aceito'),
-        ('recusado', 'Recusado'),
+        ('pendente', _('Pendente')),
+        ('aceito', _('Aceito')),
+        ('recusado', _('Recusado')),
     ]
     # quem quer o livro, qual livro e quando demonstrou interesse
     usuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name='interesses')

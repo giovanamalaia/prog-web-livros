@@ -91,7 +91,7 @@
             </div>
             {% else %}
             {% if meu_interesse %}
-            {% trans "Status" %}: {{ meu_interesse.get_status_display }}
+            {% trans "Status" %}: {% trans meu_interesse.get_status_display %}
             <form method="post" action="{% url 'excluir_interesse' livro.id %}" style="margin:0;">
                 {% csrf_token %}
                 {# Mantém a origem pra não quebrar o "Voltar" depois do POST #}
@@ -101,18 +101,20 @@
                     <i class="fa-solid fa-trash"></i> {% trans "Excluir interesse" %}
                 </button>
             </form>
-            {% else %}
-            <form method="post" action="{% url 'criar_interesse' livro.id %}" style="margin:0;">
-                {% csrf_token %}
-                {# Mantém a origem pra não quebrar o "Voltar" depois do POST #}
-                <input type="hidden" name="next" value="{{ back_url }}">
-                <button type="submit" class="btn-blue-action">
-                    <i class="fa-solid fa-book-open"></i> {% trans "Tenho interesse" %}
-                </button>
-            </form>
-            {% endif %}
-            {% endif %}
-        </div>
+	            {% else %}
+	                {% if livro.status == 'disponivel' and livro.disponivel %}
+	                    <form method="post" action="{% url 'criar_interesse' livro.id %}" style="margin:0;">
+	                        {% csrf_token %}
+	                        {# Mantém a origem pra não quebrar o "Voltar" depois do POST #}
+	                        <input type="hidden" name="next" value="{{ back_url }}">
+	                        <button type="submit" class="btn-blue-action">
+	                            <i class="fa-solid fa-book-open"></i> {% trans "Tenho interesse" %}
+	                        </button>
+	                    </form>
+	                {% endif %}
+	            {% endif %}
+	            {% endif %}
+	        </div>
 
     </div>
 </div>
