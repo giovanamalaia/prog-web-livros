@@ -13,7 +13,7 @@ import json
 import urllib.request
 from django.core.files.base import ContentFile
 from django.views.decorators.http import require_POST
-from django.db.models import Q
+from django.db.models import Q, Case, When, Value, IntegerField
 from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -27,14 +27,34 @@ def home(request):
     if request.user.is_authenticated:
         livros_disponiveis = livros_disponiveis.exclude(dono=request.user)
 
-    # "Perto de você": mesmo estado do usuário (quando existir)
+    # "Perto de você": Prioriza a mesma cidade, completa com o mesmo estado
     livros_perto = Livro.objects.none()
-    estado_usuario = getattr(getattr(request.user, 'perfil', None), 'estado', None)
-    if estado_usuario:
-        livros_perto = (
-            livros_disponiveis.filter(dono__perfil__estado=estado_usuario)
-            .order_by('-data_adicao')[:20]
-        )
+    perfil_usuario = getattr(request.user, 'perfil', None)
+    
+    if perfil_usuario:
+        estado_usuario = getattr(perfil_usuario, 'estado', None)
+        cidade_usuario = getattr(perfil_usuario, 'cidade', None)
+        
+        if estado_usuario and cidade_usuario:
+            # Pega os livros do estado, mas cria um campo temporário 'mesma_cidade' (1 ou 0)
+            livros_perto = (
+                livros_disponiveis.filter(dono__perfil__estado=estado_usuario)
+                .annotate(
+                    mesma_cidade=Case(
+                        When(dono__perfil__cidade=cidade_usuario, then=Value(1)),
+                        default=Value(0),
+                        output_field=IntegerField()
+                    )
+                )
+                # Ordena primeiro pelos da mesma cidade, depois pelos mais recentes
+                .order_by('-mesma_cidade', '-data_adicao')[:20]
+            )
+        elif estado_usuario:
+            # Fallback caso o usuário não tenha cidade cadastrada, mas tenha estado
+            livros_perto = (
+                livros_disponiveis.filter(dono__perfil__estado=estado_usuario)
+                .order_by('-data_adicao')[:20]
+            )
 
     # pesquisa
     q = request.GET.get('q', '').strip()
