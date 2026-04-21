@@ -7,7 +7,7 @@ Projeto Web em **Python + Django**, **HTML** e **CSS** para troca de livros entr
 - Luana Pinho Bueno Pena - 2312082 
 
 ## Links da entrega
-- **Site publicado:** [link site]
+- **Site publicado:** https://giovanamalaia.pythonanywhere.com/home/
 - **Repositório público:** https://github.com/giovanamalaia/prog-web-livros
 
 ## Resumo do pré-projeto 
