@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure--3gk=lkcrr!w*=_+1zso_9hb=+z_$twm1@vyg9e8)+js0d-n@7
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['giovanamalaia.pythonanywhere.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -150,3 +150,5 @@ EMAIL_HOST_USER = os.getenv('EMAIL_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASSWORD')
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
