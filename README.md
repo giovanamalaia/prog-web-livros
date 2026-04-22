@@ -7,7 +7,7 @@ Projeto Web em **Python + Django**, **HTML** e **CSS** para troca de livros entr
 - Luana Pinho Bueno Pena - 2312082 
 
 ## Links da entrega
-- **Site publicado:** https: giovanamalaia.pythonanywhere.com
+- **Site publicado:** https://giovanamalaia.pythonanywhere.com/
 - **Repositório público:** https://github.com/giovanamalaia/prog-web-livros
 
 ## Resumo do pré-projeto 
@@ -102,12 +102,13 @@ EMAIL_PASSWORD=sua_senha_de_app
 
 
 ## O que foi testado e funcionou
-- Cadastro e login
-- CRUD de livros
-- CRUD de interesses
-- Troca de idioma
-- Recuperação de senha (com e‑mail configurado)
+- Fluxo de Autenticação: Criação de conta e login.
+- Ciclo de Vida do Livro: Cadastro com imagem, edição, listagem e exclusão.
+- Sistema de Trocas: Envio de interesse, recebimento de notificações e mudança de status do livro após o aceite.
+- Comunicação: Disparo de e-mails via SMTP em todas as etapas da negociação.
+- Multi-idioma: Tradução completa da interface entre Português e Inglês.
 
 ## O que foi testado e não funcionou
-- Quando você clica em "Tenho interesse", clica em "Aceitar solicitação" ou qualquer coisa que faz o sistema mandar um email, pode demorar um pouco para carregar.
-- Como usamos só django, python, html e css, algumas informações (como status do interesse após ser aceito pelo dono), pode precisar que você recarregue a tela para atualizar a view em tempo real.
+- Delay no envio de e-mails: Ao clicar em "Tenho interesse" ou "Aceitar", o site pode demorar alguns segundos para carregar. Isso ocorre porque o Django processa o envio do e-mail de forma síncrona antes de redirecionar a página.
+- Atualização de Status: Por não utilizarmos JavaScript (conforme requisito), o status de uma solicitação não atualiza "ao vivo". O usuário precisa recarregar a página ou navegar para outra aba para ver a mudança refletida nas notificações.
+- Formulário de Configurações: Na edição de perfil, ao clicar em “Carregar Cidades”, a página recarrega para buscar os dados no banco. Caso o usuário tenha selecionado uma nova foto de perfil mas não tenha salvo o formulário ainda, o campo de imagem é resetado pelo navegador (comportamento padrão de segurança do HTML para inputs do tipo file).
