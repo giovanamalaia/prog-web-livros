@@ -25,7 +25,7 @@
             {% endif %}
         </form>
 
-        <div class="user-info-mini">
+        <a href="{% url 'perfil' %}" class="user-info-mini" style="text-decoration: none; color: inherit;">
             {% if user.perfil.foto_perfil %}
                 <img src="{{ user.perfil.foto_perfil.url }}" alt="{% blocktrans with username=user.username %}Avatar de {{ username }}{% endblocktrans %}" class="avatar-mini">
             {% else %}
@@ -34,7 +34,7 @@
                 </div>
             {% endif %}
             <span>{{ user.username }}</span>
-        </div>
+        </a>
 
         <div class="notif-wrapper">
             <input type="checkbox" id="notif-toggle" style="display: none;">
